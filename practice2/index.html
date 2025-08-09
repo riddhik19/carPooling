@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideShare</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #e6f0fa;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar .brand {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+       
+        /* Main container with consistent alignment */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+       
+        /* Hero Section */
+        .hero-section {
+            padding: 40px 20px;
+            background-color: #f8fafc;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+       
+        .hero-title {
+            font-size: 2.2em;
+            font-weight: 900;
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            text-align: left;
+        }
+       
+        .hero-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 40px;
+        }
+       
+        .booking-form {
+            background-color: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 450px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+       
+        .hero-image {
+            flex: 1;
+            max-width: 500px;
+            height: 400px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+       
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+       
+        .input-group {
+            position: relative;
+            margin-bottom: 16px;
+        }
+       
+        .input-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+       
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            font-size: 18px;
+            color: #6b7280;
+            z-index: 1;
+        }
+       
+        .form-input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            background-color: #f9fafb;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+       
+        .form-input:focus {
+            outline: none;
+            border-color: #1e3a8a;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+       
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+       
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+       
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+       
+        .date-input, .time-input {
+            position: relative;
+        }
+       
+        .date-display, .time-display {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            background-color: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+       
+        .date-display:hover, .time-display:hover {
+            border-color: #1e3a8a;
+            background-color: white;
+        }
+       
+        .dropdown-arrow {
+            font-size: 12px;
+            color: #6b7280;
+        }
+       
+        /* Hidden input styling - positioned over the display */
+        .hidden-date-input, .hidden-time-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+       
+        .see-prices-btn {
+            width: 100%;
+            background-color: #1e3a8a;
+            color: white;
+            padding: 18px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+       
+        .see-prices-btn:hover {
+            background-color: #1e40af;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+        }
+       
+        .login-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+       
+        .login-link:hover {
+            color: #1e3a8a;
+            text-decoration: underline;
+        }
+       
+        /* Sections with consistent alignment */
+        .section {
+            background-color: white;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+       
+        .about-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 40px;
+        }
+       
+        .about-text {
+            flex: 1;
+            max-width: 50%;
+        }
+       
+        .about-text h2 {
+            font-size: 2em;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+       
+        .about-text p {
+            line-height: 1.6;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+       
+        .about-image {
+            flex: 1;
+            max-width: 50%;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+            color: #6b7280;
+            font-size: 14px;
+        }
+       
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+       
+        .stats-section h2 {
+            font-size: 2em;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+       
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+       
+        .stats-table th, .stats-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+       
+        .stats-table th {
+            background-color: #1e3a8a;
+            color: white;
+            font-weight: 600;
+        }
+       
+        .stats-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+       
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 10px;
+            }
+           
+            .hero-section {
+                padding: 20px 10px;
+            }
+           
+            .hero-title {
+                font-size: 1.8em;
+                text-align: center;
+            }
+           
+            .hero-content {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+           
+            .booking-form {
+                max-width: 100%;
+                margin: 0;
+                padding: 24px;
+            }
+           
+            .hero-image {
+                max-width: 100%;
+                height: 250px;
+            }
+           
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+           
+            .about-section {
+                flex-direction: column;
+                gap: 20px;
+            }
+           
+            .about-text, .about-image {
+                max-width: 100%;
+            }
+           
+            .section {
+                padding: 20px;
+            }
+           
+            .navbar .brand {
+                font-size: 1.8em;
+            }
+           
+            .navbar a {
+                font-size: 0.9em;
+                margin: 0 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">RideShare</div>
+        <div>
+            <a onclick="navigateToRideLogin()">Ride</a>
+            <a href="#business">Business</a>
+            <a href="#about">About Us</a>
+            <a onclick="navigateToLogin()">Login</a>
+            <a onclick="navigateToSignup()">Sign Up</a>
+        </div>
+    </div>
+   
+    <div class="main-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h2 class="hero-title">Go anywhere with<br>RideShare</h2>
+           
+            <div class="hero-content">
+                <div class="booking-form">
+                    <form>
+                        <div class="input-group">
+                            <div class="input-with-icon">
+                                <span class="input-icon">📍</span>
+                                <input type="text" class="form-input" placeholder="Pickup location" id="pickup">
+                            </div>
+                        </div>
+                       
+                        <div class="input-group">
+                            <div class="input-with-icon">
+                                <span class="input-icon">📍</span>
+                                <input type="text" class="form-input" placeholder="Dropoff location" id="dropoff">
+                            </div>
+                        </div>
+                       
+                        <div class="form-row">
+                            <div class="date-input">
+                                <label class="form-label">Date</label>
+                                <div class="date-display" onclick="document.getElementById('date').click()">
+                                    <span class="input-icon">📅</span>
+                                    <span id="date-text">Today</span>
+                                    <span class="dropdown-arrow">▼</span>
+                                    <input type="date" id="date" class="hidden-date-input" onchange="updateDateDisplay()">
+                                </div>
+                            </div>
+                           
+                            <div class="time-input">
+                                <label class="form-label">Time</label>
+                                <div class="time-display" onclick="document.getElementById('time').click()">
+                                    <span class="input-icon">🕐</span>
+                                    <span id="time-text">Now</span>
+                                    <span class="dropdown-arrow">▼</span>
+                                    <input type="time" id="time" class="hidden-time-input" step="300" onchange="updateTimeDisplay()">
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <button type="button" class="see-prices-btn" onclick="navigateToRideLogin()">
+                            See prices
+                        </button>
+                    </form>
+                   
+                    <a class="login-link" onclick="checkLogin('activity')">Log in to see your recent activity</a>
+                </div>
+               
+                <div class="hero-image">
+                    <img src="https://www.quytech.com/blog/wp-content/uploads/2019/12/rideshring-app-development-scaled.jpg" alt="RideShare App Illustration">
+                </div>
+            </div>
+        </div>
+       
+        <!-- About Section -->
+        <div id="about" class="section about-section">
+            <div class="about-text">
+                <h2>About Us</h2>
+                <p>RideShare is dedicated to providing a seamless and affordable ride-sharing experience. Founded with the mission to reduce traffic congestion and promote eco-friendly travel, we connect drivers and passengers efficiently. Our platform ensures safety, reliability, and cost savings through shared rides.</p>
+                <p>Join thousands of satisfied users who trust RideShare for their daily commute and travel needs. Experience the future of transportation today!</p>
+            </div>
+            <div class="about-image">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/015/393/176/small_2x/online-car-rent-people-using-mobile-application-for-ordering-taxi-cab-or-car-sharing-woman-near-smartphone-screen-with-route-and-location-mark-on-a-city-map-vector.jpg" alt="Happy rideshare community">
+            </div>
+        </div>
+       
+        <!-- Business Stats Section -->
+        <div id="business" class="section stats-section">
+            <h2>Business Stats</h2>
+            <table class="stats-table">
+                <tr>
+                    <th>Year</th>
+                    <th>Total Rides</th>
+                    <th>Revenue (USD)</th>
+                    <th>Active Drivers</th>
+                </tr>
+                <tr>
+                    <td>2023</td>
+                    <td>10,000</td>
+                    <td>500,000</td>
+                    <td>200</td>
+                </tr>
+                <tr>
+                    <td>2024</td>
+                    <td>15,000</td>
+                    <td>750,000</td>
+                    <td>300</td>
+                </tr>
+                <tr>
+                    <td>2025</td>
+                    <td>20,000</td>
+                    <td>1,000,000</td>
+                    <td>400</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+   
+    <script>
+        function navigateToRideLogin() {
+            try {
+                window.location.href = 'login.html?tab=login&action=ride';
+            } catch (e) {
+                alert('Error navigating to login: ' + e.message);
+            }
+        }
+
+        function checkLogin(action) {
+            try {
+                if (!localStorage.getItem('loggedIn')) {
+                    window.location.href = `login.html?tab=login&action=${action}`;
+                } else {
+                    if (action === 'ride') {
+                        const pickup = document.getElementById('pickup').value;
+                        const dropoff = document.getElementById('dropoff').value;
+                        const date = document.getElementById('date-text').textContent;
+                        const time = document.getElementById('time-text').textContent;
+                        alert(`Booking ride for ${localStorage.getItem('userRole')} from ${pickup || 'unspecified pickup'} to ${dropoff || 'unspecified dropoff'} on ${date} at ${time}`);
+                    } else if (action === 'activity') {
+                        alert(`Showing recent activity for ${localStorage.getItem('userRole')}`);
+                    }
+                }
+            } catch (e) {
+                alert('Error accessing localStorage: ' + e.message);
+                window.location.href = `login.html?tab=login&action=${action}`;
+            }
+        }
+
+        function navigateToLogin() {
+            window.location.href = 'login.html?tab=login';
+        }
+
+        function navigateToSignup() {
+            window.location.href = 'login.html?tab=signup';
+        }
+
+        function initializeDateTime() {
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+           
+            document.getElementById('date').value = today;
+            document.getElementById('time').value = currentTime;
+           
+            updateDateDisplay();
+            updateTimeDisplay();
+        }
+       
+        function updateDateDisplay() {
+            const dateInput = document.getElementById('date');
+            const dateText = document.getElementById('date-text');
+            const today = new Date().toISOString().split('T')[0];
+           
+            if (dateInput.value === today || dateInput.value === '') {
+                dateText.textContent = 'Today';
+            } else {
+                const selectedDate = new Date(dateInput.value);
+                dateText.textContent = selectedDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+        }
+       
+        function updateTimeDisplay() {
+            const timeInput = document.getElementById('time');
+            const timeText = document.getElementById('time-text');
+            const now = new Date();
+            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+           
+            if (timeInput.value === currentTime || timeInput.value === '') {
+                timeText.textContent = 'Now';
+            } else {
+                const [hours, minutes] = timeInput.value.split(':');
+                const time = new Date();
+                time.setHours(parseInt(hours), parseInt(minutes));
+                timeText.textContent = time.toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+            }
+        }
+       
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDateTime();
+           
+            // Add event listeners for better functionality
+            const dateInput = document.getElementById('date');
+            const timeInput = document.getElementById('time');
+            const dateDisplay = document.querySelector('.date-display');
+            const timeDisplay = document.querySelector('.time-display');
+           
+            // Trigger native pickers on click
+            dateDisplay.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dateInput.focus();
+                dateInput.click();
+            });
+           
+            timeDisplay.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                timeInput.focus();
+                timeInput.click();
+            });
+           
+            // Update display when values change
+            dateInput.addEventListener('change', updateDateDisplay);
+            timeInput.addEventListener('change', updateTimeDisplay);
+           
+            // Handle input events for real-time updates
+            dateInput.addEventListener('input', updateDateDisplay);
+            timeInput.addEventListener('input', updateTimeDisplay);
+
+            // Check for action parameter on page load
+            const urlParams = new URLSearchParams(window.location.search);
+            const action = urlParams.get('action');
+            if (action) {
+                checkLogin(action);
+            }
+        });
+       
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.getAttribute('href') && link.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(link.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
