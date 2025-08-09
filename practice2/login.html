@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f5f7fa;
+            background-color: #dbeafe; /* Changed to a light blue background */
             margin: 0;
             padding: 0;
             display: flex;
@@ -196,7 +196,6 @@
                 showSection('login');
             }
         });
-
         function showSection(section) {
             const loginSection = document.getElementById('login-section');
             const signupSection = document.getElementById('signup-section');
@@ -214,14 +213,12 @@
                 signupTab.classList.add('active');
             }
         }
-
         function handleLogin() {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const role = document.querySelector('input[name="role"]:checked').value;
             const urlParams = new URLSearchParams(window.location.search);
             const action = urlParams.get('action');
-
             try {
                 if (email && password) {
                     localStorage.setItem('loggedIn', 'true');
@@ -245,14 +242,12 @@
                 alert('Error accessing localStorage: ' + e.message);
             }
         }
-
         function handleSignup() {
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             const role = document.querySelector('input[name="signup-role"]:checked').value;
             const urlParams = new URLSearchParams(window.location.search);
             const action = urlParams.get('action');
-
             try {
                 if (email && password) {
                     localStorage.setItem('loggedIn', 'true');

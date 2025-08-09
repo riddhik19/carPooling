@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideShare - Edit Ride</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #dbeafe;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .edit-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 500px;
+        }
+        .edit-container h1 {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.9em;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: #f9fafb;
+        }
+        .save-btn, .cancel-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .save-btn {
+            background-color: #1e3a8a;
+            color: white;
+        }
+        .save-btn:hover {
+            background-color: #1e40af;
+        }
+        .cancel-btn {
+            background-color: #6b7280;
+            color: white;
+        }
+        .cancel-btn:hover {
+            background-color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-container">
+        <h1>Edit Ride</h1>
+        <div class="input-group">
+            <label for="passenger">Passenger</label>
+            <input type="text" id="passenger" class="input-field" placeholder="Enter passenger name">
+        </div>
+        <div class="input-group">
+            <label for="pickup">Pickup Location</label>
+            <input type="text" id="pickup" class="input-field" placeholder="Enter pickup location">
+        </div>
+        <div class="input-group">
+            <label for="dropoff">Drop-off Location</label>
+            <input type="text" id="dropoff" class="input-field" placeholder="Enter drop-off location">
+        </div>
+        <div class="input-group">
+            <label for="time">Time</label>
+            <input type="datetime-local" id="time" class="input-field">
+        </div>
+        <button class="save-btn" onclick="saveRide()">Save Changes</button>
+        <button class="cancel-btn" onclick="window.location.href='driver_dashboard.html'">Cancel</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const rideData = JSON.parse(localStorage.getItem('editRide'));
+                if (rideData) {
+                    document.getElementById('passenger').value = rideData.passenger || '';
+                    document.getElementById('pickup').value = rideData.pickup || '';
+                    document.getElementById('dropoff').value = rideData.dropoff || '';
+                    document.getElementById('time').value = rideData.time || '';
+                }
+            } catch (e) {
+                alert('Error loading ride data: ' + e.message);
+            }
+        });
+
+        function saveRide() {
+            const rideData = {
+                passenger: document.getElementById('passenger').value,
+                pickup: document.getElementById('pickup').value,
+                dropoff: document.getElementById('dropoff').value,
+                time: document.getElementById('time').value
+            };
+            try {
+                localStorage.setItem('editRide', JSON.stringify(rideData));
+                alert('Ride details saved! (Note: Backend integration needed for persistence.)');
+                window.location.href = 'driver_dashboard.html';
+            } catch (e) {
+                alert('Error saving ride data: ' + e.message);
+            }
+        }
+    </script>
+</body>
+</html>
