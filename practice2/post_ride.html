@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideShare - Post a Ride</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #dbeafe;
+            margin: 0;
+            padding: 0;
+            color: #374151;
+        }
+        .navbar {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        .post-ride-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        h1 {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.4em;
+            color: #1e3a8a;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.9em;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: #f9fafb;
+        }
+        .map-placeholder {
+            height: 200px;
+            background-color: #e5e7eb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: #6b7280;
+        }
+        .current-location-btn {
+            padding: 8px 16px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .current-location-btn:hover {
+            background-color: #1e40af;
+        }
+        .ride-preferences, .safety-verification {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .preference-item {
+            flex: 1 1 45%;
+        }
+        .post-ride-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .post-ride-btn:hover {
+            background-color: #1e40af;
+        }
+        .summary-section {
+            background-color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+        .summary-section p {
+            margin: 5px 0;
+            color: #374151;
+        }
+        @media (max-width: 768px) {
+            .post-ride-container {
+                padding: 20px;
+            }
+            .preference-item {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">RideShare</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="driver_dashboard.html">Dashboard</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </nav>
+    <div class="post-ride-container">
+        <h1>Post a Ride</h1>
+        <!-- Ride Details Section -->
+        <div class="ride-details-section">
+            <h2>Ride Details</h2>
+            <div class="input-group">
+                <label for="pickup-location">Pickup Location</label>
+                <input type="text" id="pickup-location" class="input-field" placeholder="Enter pickup location" required>
+                <button class="current-location-btn" onclick="getCurrentLocation('pickup')">Use Current Location</button>
+            </div>
+            <div class="input-group">
+                <label for="dropoff-location">Drop-off Location</label>
+                <input type="text" id="dropoff-location" class="input-field" placeholder="Enter drop-off location" required>
+            </div>
+            <div class="map-placeholder" id="route-preview">Google Maps Route Preview (Distance: -- km, Time: -- min)</div>
+        </div>
+        <!-- Schedule & Seats -->
+        <div class="schedule-seats-section">
+            <h2>Schedule & Seats</h2>
+            <div class="input-group">
+                <label for="departure-time">Date & Time of Departure</label>
+                <input type="datetime-local" id="departure-time" class="input-field" required>
+            </div>
+            <div class="input-group">
+                <label for="available-seats">Available Seats</label>
+                <input type="number" id="available-seats" class="input-field" min="1" max="7" value="1" required>
+            </div>
+            <div class="input-group">
+                <label for="estimated-duration">Estimated Duration (minutes, optional)</label>
+                <input type="number" id="estimated-duration" class="input-field" placeholder="Auto-calculated" min="1">
+            </div>
+        </div>
+        <!-- Pricing -->
+        <div class="pricing-section">
+            <h2>Pricing</h2>
+            <div class="input-group">
+                <label for="fare-per-seat">Fare per Seat ($)</label>
+                <input type="number" id="fare-per-seat" class="input-field" min="0" step="0.01" placeholder="Enter fare or auto-suggested" required>
+            </div>
+            <div class="input-group">
+                <label>Payment Method</label>
+                <select id="payment-method" class="input-field" required>
+                    <option value="cash">Cash</option>
+                    <option value="online">Online</option>
+                    <option value="split">Split Payment</option>
+                </select>
+            </div>
+        </div>
+        <!-- Ride Preferences -->
+        <div class="ride-preferences-section">
+            <h2>Ride Preferences</h2>
+            <div class="ride-preferences">
+                <div class="preference-item">
+                    <label>Luggage Allowed</label>
+                    <select id="luggage-allowed" class="input-field">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="preference-item">
+                    <label>Pets Allowed</label>
+                    <select id="pets-allowed" class="input-field">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="preference-item">
+                    <label>Music Preference</label>
+                    <input type="text" id="music-preference" class="input-field" placeholder="e.g., Pop, Classical">
+                </div>
+                <div class="preference-item">
+                    <label>Smoking Allowed</label>
+                    <select id="smoking-allowed" class="input-field">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- Safety & Verification -->
+        <div class="safety-verification-section">
+            <h2>Safety & Verification</h2>
+            <div class="input-group">
+                <label>Passenger Identity Requirement</label>
+                <select id="passenger-verification" class="input-field" required>
+                    <option value="verified">Verified Only</option>
+                    <option value="open">Open to All</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="emergency-contact">Emergency Contact (Optional)</label>
+                <input type="tel" id="emergency-contact" class="input-field" placeholder="Enter phone number">
+            </div>
+        </div>
+        <!-- Confirmation & Post -->
+        <div class="confirmation-section">
+            <h2>Ride Summary</h2>
+            <div class="summary-section" id="ride-summary">
+                <p><strong>Pickup:</strong> <span id="summary-pickup">--</span></p>
+                <p><strong>Drop-off:</strong> <span id="summary-dropoff">--</span></p>
+                <p><strong>Departure:</strong> <span id="summary-departure">--</span></p>
+                <p><strong>Seats:</strong> <span id="summary-seats">--</span></p>
+                <p><strong>Fare:</strong> $<span id="summary-fare">--</span></p>
+                <p><strong>Payment:</strong> <span id="summary-payment">--</span></p>
+                <p><strong>Preferences:</strong> <span id="summary-preferences">--</span></p>
+                <p><strong>Verification:</strong> <span id="summary-verification">--</span></p>
+            </div>
+            <button class="post-ride-btn" onclick="postRide()">Post Ride</button>
+        </div>
+    </div>
+    <script>
+        // Check if user is logged in as driver
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const loggedIn = localStorage.getItem('loggedIn');
+                const userRole = localStorage.getItem('userRole');
+                if (loggedIn !== 'true' || userRole !== 'driver') {
+                    alert('Please log in as a driver to post a ride.');
+                    window.location.href = 'login.html?tab=login';
+                }
+                updateSummary(); // Initialize summary on page load
+            } catch (e) {
+                alert('Error accessing localStorage: ' + e.message);
+                window.location.href = 'login.html?tab=login';
+            }
+        });
+
+        // Update ride summary dynamically
+        function updateSummary() {
+            const pickup = document.getElementById('pickup-location').value || '--';
+            const dropoff = document.getElementById('dropoff-location').value || '--';
+            const departure = document.getElementById('departure-time').value || '--';
+            const seats = document.getElementById('available-seats').value || '--';
+            const fare = document.getElementById('fare-per-seat').value || '--';
+            const payment = document.getElementById('payment-method').value || '--';
+            const luggage = document.getElementById('luggage-allowed').value || '--';
+            const pets = document.getElementById('pets-allowed').value || '--';
+            const music = document.getElementById('music-preference').value || 'None';
+            const smoking = document.getElementById('smoking-allowed').value || '--';
+            const verification = document.getElementById('passenger-verification').value || '--';
+
+            document.getElementById('summary-pickup').textContent = pickup;
+            document.getElementById('summary-dropoff').textContent = dropoff;
+            document.getElementById('summary-departure').textContent = departure ? new Date(departure).toLocaleString() : '--';
+            document.getElementById('summary-seats').textContent = seats;
+            document.getElementById('summary-fare').textContent = fare;
+            document.getElementById('summary-payment').textContent = payment.charAt(0).toUpperCase() + payment.slice(1);
+            document.getElementById('summary-preferences').textContent = `Luggage: ${luggage}, Pets: ${pets}, Music: ${music}, Smoking: ${smoking}`;
+            document.getElementById('summary-verification').textContent = verification.charAt(0).toUpperCase() + verification.slice(1);
+        }
+
+        // Simulate getting current location (placeholder)
+        function getCurrentLocation(field) {
+            alert('Current location feature requires Google Maps API integration and geolocation permissions.');
+            // Example: document.getElementById(`${field}-location`).value = "Current Location (GPS)";
+            updateSummary();
+        }
+
+        // Handle form input changes to update summary
+        document.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('input', updateSummary);
+        });
+        document.querySelectorAll('select.input-field').forEach(select => {
+            select.addEventListener('change', updateSummary);
+        });
+
+        // Handle ride posting
+        function postRide() {
+            try {
+                const rideData = {
+                    pickup: document.getElementById('pickup-location').value,
+                    dropoff: document.getElementById('dropoff-location').value,
+                    departure: document.getElementById('departure-time').value,
+                    seats: document.getElementById('available-seats').value,
+                    fare: document.getElementById('fare-per-seat').value,
+                    payment: document.getElementById('payment-method').value,
+                    luggage: document.getElementById('luggage-allowed').value,
+                    pets: document.getElementById('pets-allowed').value,
+                    music: document.getElementById('music-preference').value,
+                    smoking: document.getElementById('smoking-allowed').value,
+                    verification: document.getElementById('passenger-verification').value,
+                    emergency: document.getElementById('emergency-contact').value
+                };
+                if (!rideData.pickup || !rideData.dropoff || !rideData.departure || !rideData.seats || !rideData.fare || !rideData.payment || !rideData.verification) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+                // Simulate saving to localStorage (replace with backend API call in production)
+                let rides = JSON.parse(localStorage.getItem('postedRides') || '[]');
+                rides.push(rideData);
+                localStorage.setItem('postedRides', JSON.stringify(rides));
+                alert('Your ride has been posted! Passengers can now book.');
+                window.location.href = 'driver_dashboard.html';
+            } catch (e) {
+                alert('Error posting ride: ' + e.message);
+            }
+        }
+
+        function logout() {
+            try {
+                localStorage.clear();
+                window.location.href = 'login.html?tab=login';
+            } catch (e) {
+                alert('Error clearing localStorage: ' + e.message);
+                window.location.href = 'login.html?tab=login';
+            }
+        }
+    </script>
+</body>
+</html>

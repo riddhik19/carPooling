@@ -179,6 +179,85 @@
         .support-link:hover {
             text-decoration: underline;
         }
+        /* SOS Popup Styles */
+        .sos-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .sos-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        .sos-modal-content h2 {
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+        .sos-trigger-btn {
+            background-color: #dc2626;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .sos-trigger-btn:hover {
+            background-color: #b91c1c;
+        }
+        .emergency-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .emergency-btn {
+            padding: 10px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .emergency-btn:hover {
+            background-color: #1e40af;
+        }
+        .alert-details, .status-updates, .safety-tips {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .alert-details p, .status-updates p, .safety-tips li {
+            margin: 5px 0;
+            color: #374151;
+        }
+        .cancel-sos-btn {
+            padding: 8px 16px;
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .cancel-sos-btn:hover {
+            background-color: #4b5563;
+        }
         @media (max-width: 768px) {
             .dashboard-container {
                 padding: 20px;
@@ -187,8 +266,11 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .quick-stats, .metrics-grid {
+            .quick-stats, .metrics-grid, .emergency-options {
                 grid-template-columns: 1fr;
+            }
+            .sos-modal-content {
+                padding: 15px;
             }
         }
     </style>
@@ -204,7 +286,6 @@
     </nav>
     <div class="dashboard-container">
         <h1>Driver Dashboard</h1>
-
         <!-- Profile Snapshot -->
         <div class="profile-snapshot">
             <div class="profile-photo"></div>
@@ -214,7 +295,6 @@
                 <p class="verification-badge">✔ Verified Driver</p>
             </div>
         </div>
-
         <!-- Quick Stats -->
         <div class="quick-stats">
             <div class="stat-card">
@@ -230,11 +310,10 @@
                 <p>Rank #3 in Region</p>
             </div>
         </div>
-
         <!-- Ride Management -->
         <div class="ride-section">
             <h2>Upcoming Rides</h2>
-            <button class="post-ride-btn" onclick="alert('Post a new ride functionality not implemented yet.')">Post a Ride</button>
+            <button class="post-ride-btn" onclick="window.location.href='post_ride.html'">Post a Ride</button>
             <div class="ride-list">
                 <div class="ride-item">
                     <p><strong>Passenger:</strong> Alice Smith</p>
@@ -264,7 +343,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Performance & Earnings -->
         <div class="earnings-section">
             <h2>Earnings Overview</h2>
@@ -302,11 +380,10 @@
                 </div>
             </div>
         </div>
-
         <!-- Safety & Support -->
         <div class="safety-section">
             <h2>Safety & Support</h2>
-            <button class="sos-btn" onclick="alert('SOS triggered. Support will contact you.')">SOS Center</button>
+            <button class="sos-btn" onclick="openSOSModal()">SOS Center</button>
             <p><strong>Verification Status:</strong> Completed</p>
             <p><a href="#" class="support-link" onclick="alert('Support chat not implemented.')">Contact Support</a></p>
             <div class="ride-list">
@@ -316,7 +393,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Ratings & Feedback -->
         <div class="ratings-section">
             <h2>Ratings & Feedback</h2>
@@ -347,13 +423,11 @@
                 </div>
             </div>
         </div>
-
         <!-- Technical/Health Notifications -->
         <div class="notification">
             <p><strong>App Update Available:</strong> Version 2.1.3 - Please update for improved performance.</p>
             <p><strong>Connection Status:</strong> GPS and Internet stable</p>
         </div>
-
         <!-- Growth & Rewards -->
         <div class="growth-section">
             <h2>Growth & Rewards</h2>
@@ -372,8 +446,43 @@
                 </div>
             </div>
         </div>
+        <!-- SOS Modal -->
+        <div class="sos-modal" id="sosModal">
+            <div class="sos-modal-content">
+                <h2>Emergency SOS</h2>
+                <button class="sos-trigger-btn" onmousedown="startLongPress()" onmouseup="clearLongPress()" ontouchstart="startLongPress()" ontouchend="clearLongPress()">Press and Hold to Trigger SOS</button>
+                <div class="emergency-options">
+                    <button class="emergency-btn" onclick="callEmergency('Police', '100')">Call Police (100)</button>
+                    <button class="emergency-btn" onclick="callEmergency('Ambulance', '108')">Call Ambulance (108)</button>
+                    <button class="emergency-btn" onclick="callEmergency('Admin', 'admin')">Call Admin Support</button>
+                    <button class="emergency-btn" onclick="callEmergency('Trusted Contact', 'trusted')">Call Trusted Contact</button>
+                </div>
+                <div class="alert-details">
+                    <h3>Alert Details</h3>
+                    <p><strong>Driver:</strong> John Doe (Vehicle: Toyota Camry, License: XYZ-1234)</p>
+                    <p><strong>Passenger:</strong> Alice Smith</p>
+                    <p><strong>Pickup:</strong> 123 Main St, City</p>
+                    <p><strong>Drop-off:</strong> 456 Oak Ave, City</p>
+                    <p><strong>Ride ID:</strong> RS123456</p>
+                    <p><strong>SOS Triggered:</strong> <span id="sos-time">--</span></p>
+                    <p><strong>Location:</strong> <a href="#" onclick="alert('Live tracking requires Google Maps API integration.')" id="sos-location">Current Location (GPS)</a></p>
+                </div>
+                <div class="status-updates">
+                    <h3>Status Updates</h3>
+                    <p id="sos-status">No SOS triggered yet.</p>
+                </div>
+                <div class="safety-tips">
+                    <h3>Safety Tips</h3>
+                    <ul>
+                        <li>Stay visible and in public areas.</li>
+                        <li>Keep your phone charged and accessible.</li>
+                        <li>Stay on the call with support if possible.</li>
+                    </ul>
+                </div>
+                <button class="cancel-sos-btn" onclick="cancelSOS()">Cancel SOS</button>
+            </div>
+        </div>
     </div>
-
     <script>
         // Check if user is logged in as driver
         document.addEventListener('DOMContentLoaded', function() {
@@ -408,6 +517,62 @@
                 window.location.href = 'edit_ride.html';
             } catch (e) {
                 alert('Error preparing ride data: ' + e.message);
+            }
+        }
+
+        // SOS Modal Handling
+        let longPressTimer;
+        const longPressDuration = 1000; // 1 second for long press
+
+        function openSOSModal() {
+            document.getElementById('sosModal').style.display = 'flex';
+            document.getElementById('sos-time').textContent = '--';
+            document.getElementById('sos-status').textContent = 'No SOS triggered yet.';
+        }
+
+        function startLongPress() {
+            longPressTimer = setTimeout(triggerSOS, longPressDuration);
+        }
+
+        function clearLongPress() {
+            clearTimeout(longPressTimer);
+        }
+
+        function triggerSOS() {
+            try {
+                const sosData = {
+                    driver: 'John Doe',
+                    vehicle: 'Toyota Camry, License: XYZ-1234',
+                    passenger: 'Alice Smith',
+                    pickup: '123 Main St, City',
+                    dropoff: '456 Oak Ave, City',
+                    rideId: 'RS123456',
+                    time: new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                    location: 'Current Location (GPS)'
+                };
+                // Simulate saving SOS data
+                localStorage.setItem('lastSOS', JSON.stringify(sosData));
+                document.getElementById('sos-time').textContent = sosData.time;
+                document.getElementById('sos-status').textContent = 'Alert Sent: Support contacted, ETA: 5 min';
+                alert('SOS triggered! Emergency contacts and admin notified.');
+            } catch (e) {
+                alert('Error triggering SOS: ' + e.message);
+            }
+        }
+
+        function callEmergency(type, number) {
+            if (number === 'admin' || number === 'trusted') {
+                alert(`Calling ${type} not implemented. Requires backend integration.`);
+            } else {
+                alert(`Simulating call to ${type} at ${number}.`);
+                // In a real app, use: window.location.href = `tel:${number}`;
+            }
+        }
+
+        function cancelSOS() {
+            if (confirm('Are you sure you want to cancel the SOS alert?')) {
+                document.getElementById('sos-status').textContent = 'SOS cancelled.';
+                document.getElementById('sosModal').style.display = 'none';
             }
         }
     </script>
