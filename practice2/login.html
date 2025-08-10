@@ -223,6 +223,9 @@
                 if (email && password) {
                     localStorage.setItem('loggedIn', 'true');
                     localStorage.setItem('userRole', role);
+                    // Derive name from email
+                    const userName = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+                    localStorage.setItem(role === 'driver' ? 'driverName' : 'passengerName', userName);
                     alert(`Logged in as ${role} with email: ${email}`);
                     // Clear input fields
                     document.getElementById('login-email').value = '';
@@ -231,7 +234,7 @@
                     if (role === 'driver') {
                         window.location.href = 'driver_dashboard.html';
                     } else {
-                        window.location.href = 'index.html';
+                        window.location.href = 'passenger_dashboard.html';
                     }
                 } else {
                     alert('Please fill in all fields');
@@ -249,6 +252,9 @@
                 if (email && password) {
                     localStorage.setItem('loggedIn', 'true');
                     localStorage.setItem('userRole', role);
+                    // Derive name from email
+                    const userName = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+                    localStorage.setItem(role === 'driver' ? 'driverName' : 'passengerName', userName);
                     alert(`Signed up as ${role} with email: ${email}`);
                     // Clear input fields
                     document.getElementById('signup-email').value = '';
@@ -257,7 +263,7 @@
                     if (role === 'driver') {
                         window.location.href = 'driver_dashboard.html';
                     } else {
-                        window.location.href = 'index.html';
+                        window.location.href = 'passenger_dashboard.html';
                     }
                 } else {
                     alert('Please fill in all fields');

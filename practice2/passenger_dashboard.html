@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideShare - Passenger Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #dbeafe;
+            margin: 0;
+            padding: 0;
+            color: #374151;
+        }
+        .navbar {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        .dashboard-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+        h1 {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.4em;
+            color: #1e3a8a;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .profile-snapshot {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .profile-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #e5e7eb;
+        }
+        .profile-details {
+            flex-grow: 1;
+        }
+        .profile-details h2 {
+            margin: 0;
+            font-size: 1.6em;
+        }
+        .star-rating, .verification-badge {
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+        .verification-badge {
+            color: #15803d;
+            font-weight: 600;
+        }
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background-color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        }
+        .stat-card h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #374151;
+        }
+        .stat-card p {
+            margin: 5px 0 0;
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+        .ride-booking-section, .rides-section, .history-section, .safety-section, .payments-section, .ratings-section, .rewards-section {
+            margin-bottom: 30px;
+        }
+        .ride-search {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: #f9fafb;
+            box-sizing: border-box;
+        }
+        .ride-list, .feedback-list, .payment-list {
+            background-color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .ride-item, .feedback-item, .payment-item {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .ride-item:last-child, .feedback-item:last-child, .payment-item:last-child {
+            border-bottom: none;
+        }
+        .action-btn {
+            padding: 8px 16px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .action-btn:hover {
+            background-color: #1e40af;
+        }
+        .book-ride-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+        .book-ride-btn:hover {
+            background-color: #1e40af;
+        }
+        .sos-btn {
+            background-color: #dc2626;
+            padding: 12px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .sos-btn:hover {
+            background-color: #b91c1c;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .notification {
+            background-color: #fef3c7;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #92400e;
+        }
+        .support-link {
+            color: #1e3a8a;
+            text-decoration: none;
+        }
+        .support-link:hover {
+            text-decoration: underline;
+        }
+        .filters {
+            margin-bottom: 20px;
+        }
+        .filters label {
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+        .active-ride-map {
+            height: 200px;
+            background-color: #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+        }
+        /* SOS Modal Styles */
+        .sos-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .sos-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        .sos-modal-content h2 {
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+        .sos-trigger-btn {
+            background-color: #dc2626;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .sos-trigger-btn:hover {
+            background-color: #b91c1c;
+        }
+        .emergency-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .emergency-btn {
+            padding: 10px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+        .emergency-btn:hover {
+            background-color: #1e40af;
+        }
+        .alert-details, .status-updates, .safety-tips {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .alert-details p, .status-updates p, .safety-tips li {
+            margin: 5px 0;
+            color: #374151;
+        }
+        .cancel-sos-btn {
+            padding: 8px 16px;
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .cancel-sos-btn:hover {
+            background-color: #4b5563;
+        }
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 20px;
+            }
+            .profile-snapshot {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .quick-stats, .metrics-grid, .ride-search, .emergency-options {
+                grid-template-columns: 1fr;
+            }
+            .book-ride-btn {
+                margin-top: 10px;
+            }
+            .sos-modal-content {
+                padding: 15px;
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">RideShare</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="passenger_dashboard.html">Dashboard</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </nav>
+    <div class="dashboard-container">
+        <h1>Passenger Dashboard</h1>
+
+        <!-- Passenger Overview -->
+        <div class="profile-snapshot">
+            <div class="profile-photo"></div>
+            <div class="profile-details">
+                <h2 id="passenger-name">Jane Doe</h2>
+                <p class="star-rating">★★★★☆ 4.7/5 (80 reviews)</p>
+                <p class="verification-badge">✔ Verified Passenger</p>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <h3>320</h3>
+                <p>Total Rides Taken</p>
+            </div>
+            <div class="stat-card">
+                <h3>12</h3>
+                <p>Trips This Month</p>
+            </div>
+            <div class="stat-card">
+                <h3>150</h3>
+                <p>Loyalty Points</p>
+            </div>
+        </div>
+
+        <!-- Ride Booking Section -->
+        <div class="ride-booking-section">
+            <h2>Search for Rides</h2>
+            <div class="ride-search">
+                <input type="text" class="input-field" placeholder="Pickup Location" id="pickup-location">
+                <input type="text" class="input-field" placeholder="Drop-off Location" id="drop-location">
+                <input type="datetime-local" class="input-field" id="ride-time">
+                <button class="book-ride-btn" onclick="searchRides()">Search Rides</button>
+            </div>
+            <div class="filters">
+                <h3>Advanced Filters</h3>
+                <label>Price Range: <input type="number" class="input-field" placeholder="Max Price"></label>
+                <label>Seats: <input type="number" class="input-field" placeholder="Seats Required"></label>
+                <label><input type="checkbox" id="pets-allowed"> Pets Allowed</label>
+                <label><input type="checkbox" id="ac"> AC</label>
+                <label><input type="checkbox" id="luggage"> Extra Luggage</label>
+            </div>
+            <h2>Available Rides</h2>
+            <div class="ride-list">
+                <div class="ride-item">
+                    <p><strong>Driver:</strong> John Smith</p>
+                    <p><strong>Vehicle:</strong> Toyota Camry (4 seats)</p>
+                    <p><strong>Rating:</strong> ★★★★☆ 4.8</p>
+                    <p><strong>Fare:</strong> $15.00</p>
+                    <button class="action-btn" onclick="bookRide('ride1')">Book Now</button>
+                </div>
+                <div class="ride-item">
+                    <p><strong>Driver:</strong> Sarah Johnson</p>
+                    <p><strong>Vehicle:</strong> Honda SUV (6 seats)</p>
+                    <p><strong>Rating:</strong> ★★★★★ 4.9</p>
+                    <p><strong>Fare:</strong> $20.00</p>
+                    <button class="action-btn" onclick="bookRide('ride2')">Book Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming & Active Rides -->
+        <div class="rides-section">
+            <h2>Active Ride</h2>
+            <div class="ride-list">
+                <div class="ride-item">
+                    <p><strong>Driver:</strong> Mike Brown</p>
+                    <p><strong>Vehicle:</strong> Ford Sedan (MH-12-AB-1234)</p>
+                    <p><strong>Route:</strong> 123 Main St to 456 Oak Ave</p>
+                    <p><strong>Estimated Arrival:</strong> 15 min</p>
+                    <div class="active-ride-map">Map Placeholder (Live Tracking Not Implemented)</div>
+                    <button class="action-btn" onclick="cancelRide('active1')">Cancel Ride</button>
+                    <p><small>Cancellation may incur a fee as per policy.</small></p>
+                </div>
+            </div>
+            <h2>Upcoming Rides</h2>
+            <div class="ride-list">
+                <div class="ride-item">
+                    <p><strong>Driver:</strong> Alice Wilson</p>
+                    <p><strong>Pickup:</strong> 789 Pine Rd</p>
+                    <p><strong>Drop-off:</strong> 101 Elm St</p>
+                    <p><strong>Time:</strong> 08/10/2025, 10:00 AM</p>
+                    <button class="action-btn" onclick="cancelRide('upcoming1')">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ride History -->
+        <div class="history-section">
+            <h2>Ride History</h2>
+            <div class="ride-list">
+                <div class="ride-item">
+                    <p><strong>Date:</strong> 08/01/2025</p>
+                    <p><strong>Route:</strong> 456 Oak Ave to 123 Main St</p>
+                    <p><strong>Driver Rating:</strong> ★★★★★</p>
+                    <p><strong>Feedback Given:</strong> Smooth and safe ride!</p>
+                    <p><strong>Fare:</strong> $18.00 (Paid via UPI)</p>
+                    <button class="action-btn" onclick="rebookRoute('route1')">Re-book Route</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety & SOS -->
+        <div class="safety-section">
+            <h2>Safety & SOS</h2>
+            <button class="sos-btn" onclick="openSOSModal()">SOS Center</button>
+            <p><a href="#" class="support-link" onclick="shareLocation()">Share Live Location</a></p>
+            <p><a href="#" class="support-link" onclick="callSupport()">Call Support/Police</a></p>
+            <p><strong>Emergency Details:</strong> Auto-sent to support during SOS</p>
+        </div>
+
+        <!-- Payments & Wallet -->
+        <div class="payments-section">
+            <h2>Payments & Wallet</h2>
+            <div class="payment-list">
+                <div class="payment-item">
+                    <p><strong>Date:</strong> 08/01/2025</p>
+                    <p><strong>Amount:</strong> $18.00</p>
+                    <p><strong>Status:</strong> Completed (UPI)</p>
+                </div>
+                <div class="payment-item">
+                    <p><strong>Date:</strong> 07/30/2025</p>
+                    <p><strong>Amount:</strong> $10.00</p>
+                    <p><strong>Status:</strong> Refunded (Canceled Ride)</p>
+                </div>
+            </div>
+            <button class="action-btn" onclick="addPaymentMethod()">Add Payment Method</button>
+        </div>
+
+        <!-- Ratings & Feedback -->
+        <div class="ratings-section">
+            <h2>Ratings & Feedback</h2>
+            <div class="metrics-grid">
+                <div class="stat-card">
+                    <h3>4.7/5</h3>
+                    <p>Average Rating</p>
+                </div>
+                <div class="stat-card">
+                    <h3>4.8/5</h3>
+                    <p>Last Week</p>
+                </div>
+            </div>
+            <div class="feedback-list">
+                <div class="feedback-item">
+                    <p><strong>Driver:</strong> John Smith</p>
+                    <p><strong>Your Rating:</strong> ★★★★★</p>
+                    <p><strong>Your Comment:</strong> Very friendly driver!</p>
+                </div>
+                <div class="feedback-item">
+                    <p><strong>Driver:</strong> Sarah Johnson</p>
+                    <p><strong>Rating Received:</strong> ★★★★☆</p>
+                    <p><strong>Comment:</strong> Polite passenger, great communication.</p>
+                </div>
+            </div>
+            <button class="action-btn" onclick="rateDriver('ride1')">Rate Last Ride</button>
+        </div>
+
+        <!-- Growth & Rewards -->
+        <div class="rewards-section">
+            <h2>Growth & Rewards</h2>
+            <p><strong>Referral Program:</strong> Share your link to earn $5 per signup.</p>
+            <button class="action-btn" onclick="shareReferral()">Share Referral Link</button>
+            <p><strong>Referral Conversions:</strong> 3 friends joined</p>
+            <p><strong>Coupons:</strong> 10% off next ride (Code: RIDENOW10)</p>
+            <h2>Loyalty Badges</h2>
+            <div class="metrics-grid">
+                <div class="stat-card">
+                    <h3>10 Trips</h3>
+                    <p>Loyal Rider Badge</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Frequent Traveler</h3>
+                    <p>5 Rides in a Week</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical/Health Notifications -->
+        <div class="notification">
+            <p><strong>App Update Available:</strong> Version 2.1.3 - Please update for improved performance.</p>
+            <p><strong>Connection Status:</strong> GPS and Internet stable</p>
+        </div>
+
+        <!-- SOS Modal -->
+        <div class="sos-modal" id="sosModal">
+            <div class="sos-modal-content">
+                <h2>Emergency SOS</h2>
+                <button class="sos-trigger-btn" onmousedown="startLongPress()" onmouseup="clearLongPress()" ontouchstart="startLongPress()" ontouchend="clearLongPress()">Press and Hold to Trigger SOS</button>
+                <div class="emergency-options">
+                    <button class="emergency-btn" onclick="callEmergency('Police', '100')">Call Police (100)</button>
+                    <button class="emergency-btn" onclick="callEmergency('Ambulance', '108')">Call Ambulance (108)</button>
+                    <button class="emergency-btn" onclick="callEmergency('Admin', 'admin')">Call Admin Support</button>
+                    <button class="emergency-btn" onclick="callEmergency('Trusted Contact', 'trusted')">Call Trusted Contact</button>
+                </div>
+                <div class="alert-details">
+                    <h3>Alert Details</h3>
+                    <p><strong>Passenger:</strong> <span id="sos-passenger">Jane Doe</span></p>
+                    <p><strong>Driver:</strong> Mike Brown</p>
+                    <p><strong>Vehicle:</strong> Ford Sedan (MH-12-AB-1234)</p>
+                    <p><strong>Pickup:</strong> 123 Main St, City</p>
+                    <p><strong>Drop-off:</strong> 456 Oak Ave, City</p>
+                    <p><strong>Ride ID:</strong> RS123456</p>
+                    <p><strong>SOS Triggered:</strong> <span id="sos-time">--</span></p>
+                    <p><strong>Location:</strong> <a href="#" onclick="alert('Live tracking requires Google Maps API integration.')" id="sos-location">Current Location (GPS)</a></p>
+                </div>
+                <div class="status-updates">
+                    <h3>Status Updates</h3>
+                    <p id="sos-status">No SOS triggered yet.</p>
+                </div>
+                <div class="safety-tips">
+                    <h3>Safety Tips</h3>
+                    <ul>
+                        <li>Stay visible and in public areas.</li>
+                        <li>Keep your phone charged and accessible.</li>
+                        <li>Stay on the call with support if possible.</li>
+                    </ul>
+                </div>
+                <button class="cancel-sos-btn" onclick="cancelSOS()">Cancel SOS</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in as passenger
+        document.addEventListener('DOMContentLoaded', function() {
+            const loggedIn = localStorage.getItem('loggedIn');
+            const userRole = localStorage.getItem('userRole');
+            const passengerName = localStorage.getItem('passengerName') || 'Jane Doe';
+            if (loggedIn !== 'true' || userRole !== 'passenger') {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('passenger-name').textContent = passengerName;
+                document.getElementById('sos-passenger').textContent = passengerName;
+            }
+        });
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        function searchRides() {
+            const pickup = document.getElementById('pickup-location').value;
+            const dropoff = document.getElementById('drop-location').value;
+            const rideTime = document.getElementById('ride-time').value;
+            const maxPrice = document.querySelector('.filters input[type="number"][placeholder="Max Price"]').value;
+            const seats = document.querySelector('.filters input[type="number"][placeholder="Seats Required"]').value;
+            const pets = document.getElementById('pets-allowed').checked;
+            const ac = document.getElementById('ac').checked;
+            const luggage = document.getElementById('luggage').checked;
+
+            // Store search parameters in localStorage
+            localStorage.setItem('searchParams', JSON.stringify({
+                pickup,
+                dropoff,
+                rideTime,
+                maxPrice,
+                seats,
+                pets,
+                ac,
+                luggage
+            }));
+
+            // Redirect to search ride page
+            window.location.href = 'search_ride.html';
+        }
+
+        function bookRide(rideId) {
+            alert(`Booked ride ${rideId}. Functionality not fully implemented.`);
+        }
+
+        function cancelRide(rideId) {
+            alert(`Cancelled ride ${rideId}. Functionality not fully implemented.`);
+        }
+
+        function rebookRoute(routeId) {
+            alert(`Re-booked route ${routeId}. Functionality not fully implemented.`);
+        }
+
+        function shareLocation() {
+            alert('Location sharing not implemented.');
+        }
+
+        function callSupport() {
+            alert('Calling support/police not implemented.');
+        }
+
+        function addPaymentMethod() {
+            alert('Add payment method functionality not implemented.');
+        }
+
+        function rateDriver(rideId) {
+            alert(`Rating driver for ride ${rideId} not implemented.`);
+        }
+
+        function shareReferral() {
+            alert('Referral link copied!');
+        }
+
+        // SOS Modal Handling
+        let longPressTimer;
+        const longPressDuration = 1000; // 1 second for long press
+
+        function openSOSModal() {
+            document.getElementById('sosModal').style.display = 'flex';
+            document.getElementById('sos-time').textContent = '--';
+            document.getElementById('sos-status').textContent = 'No SOS triggered yet.';
+        }
+
+        function startLongPress() {
+            longPressTimer = setTimeout(triggerSOS, longPressDuration);
+        }
+
+        function clearLongPress() {
+            clearTimeout(longPressTimer);
+        }
+
+        function triggerSOS() {
+            try {
+                const passengerName = localStorage.getItem('passengerName') || 'Jane Doe';
+                const sosData = {
+                    passenger: passengerName,
+                    driver: 'Mike Brown',
+                    vehicle: 'Ford Sedan (MH-12-AB-1234)',
+                    pickup: '123 Main St, City',
+                    dropoff: '456 Oak Ave, City',
+                    rideId: 'RS123456',
+                    time: new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
+                    location: 'Current Location (GPS)'
+                };
+                localStorage.setItem('lastPassengerSOS', JSON.stringify(sosData));
+                document.getElementById('sos-time').textContent = sosData.time;
+                document.getElementById('sos-status').textContent = 'Alert Sent: Support contacted, ETA: 5 min';
+                alert('SOS triggered! Emergency contacts and admin notified.');
+            } catch (e) {
+                alert('Error triggering SOS: ' + e.message);
+            }
+        }
+
+        function callEmergency(type, number) {
+            if (number === 'admin' || number === 'trusted') {
+                alert(`Calling ${type} not implemented. Requires backend integration.`);
+            } else {
+                alert(`Simulating call to ${type} at ${number}.`);
+            }
+        }
+
+        function cancelSOS() {
+            if (confirm('Are you sure you want to cancel the SOS alert?')) {
+                document.getElementById('sos-status').textContent = 'SOS cancelled.';
+                document.getElementById('sosModal').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

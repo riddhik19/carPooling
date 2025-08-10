@@ -42,7 +42,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             max-width: 1200px;
             margin: 20px auto;
-            overflow-x: hidden; /* Prevent horizontal overflow */
+            overflow-x: hidden;
         }
         h1 {
             font-size: 1.8em;
@@ -69,14 +69,14 @@
         }
         .profile-details {
             flex-grow: 1;
-            min-width: 0; /* Prevent overflow in flex items */
+            min-width: 0;
         }
         .profile-details h2 {
             margin: 0;
             font-size: 1.6em;
-            white-space: nowrap; /* Prevent text wrapping */
+            white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis; /* Add ellipsis for long names */
+            text-overflow: ellipsis;
         }
         .star-rating, .verification-badge {
             color: #6b7280;
@@ -117,7 +117,7 @@
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #e5e7eb;
-            overflow-x: auto; /* Allow horizontal scroll if content overflows */
+            overflow-x: auto;
         }
         .ride-item, .feedback-item {
             padding: 10px;
@@ -135,7 +135,7 @@
             cursor: pointer;
             font-size: 0.9em;
             margin-left: 10px;
-            white-space: nowrap; /* Prevent button text wrapping */
+            white-space: nowrap;
         }
         .action-btn:hover {
             background-color: #1e40af;
@@ -186,7 +186,6 @@
         .support-link:hover {
             text-decoration: underline;
         }
-        /* SOS Popup Styles */
         .sos-modal {
             display: none;
             position: fixed;
@@ -206,8 +205,8 @@
             max-width: 500px;
             width: 90%;
             text-align: center;
-            overflow-y: auto; /* Allow vertical scroll if content overflows */
-            max-height: 90vh; /* Limit modal height */
+            overflow-y: auto;
+            max-height: 90vh;
         }
         .sos-modal-content h2 {
             color: #dc2626;
@@ -242,7 +241,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.9em;
-            white-space: nowrap; /* Prevent button text wrapping */
+            white-space: nowrap;
         }
         .emergency-btn:hover {
             background-color: #1e40af;
@@ -268,7 +267,6 @@
         .cancel-sos-btn:hover {
             background-color: #4b5563;
         }
-        /* Profile Edit Modal Styles */
         .profile-edit-modal {
             display: none;
             position: fixed;
@@ -288,8 +286,8 @@
             max-width: 400px;
             width: 90%;
             text-align: center;
-            overflow-y: auto; /* Allow vertical scroll if content overflows */
-            max-height: 90vh; /* Limit modal height */
+            overflow-y: auto;
+            max-height: 90vh;
         }
         .profile-edit-modal-content h2 {
             color: #1e3a8a;
@@ -312,8 +310,8 @@
             border-radius: 8px;
             font-size: 1em;
             background-color: #f9fafb;
-            box-sizing: border-box; /* Include padding and border in width calculation */
-            max-width: 100%; /* Ensure it doesn't exceed container */
+            box-sizing: border-box;
+            max-width: 100%;
         }
         .save-profile-btn {
             width: 100%;
@@ -346,18 +344,18 @@
                 width: 95%;
             }
             .input-field {
-                font-size: 0.9em; /* Slightly smaller text on mobile */
+                font-size: 0.9em;
             }
             .action-btn, .emergency-btn {
-                font-size: 0.85em; /* Adjust button text size */
+                font-size: 0.85em;
             }
         }
         @media (max-width: 480px) {
             .input-field {
-                padding: 10px; /* Reduce padding on very small screens */
+                padding: 10px;
             }
             .profile-details h2 {
-                font-size: 1.3em; /* Smaller name text on mobile */
+                font-size: 1.3em;
             }
         }
     </style>
@@ -547,7 +545,7 @@
                 </div>
                 <div class="alert-details">
                     <h3>Alert Details</h3>
-                    <p><strong>Driver:</strong> John Doe (Vehicle: Toyota Camry, License: XYZ-1234)</p>
+                    <p><strong>Driver:</strong> <span id="sos-driver-name">John Doe</span> (Vehicle: Toyota Camry, License: XYZ-1234)</p>
                     <p><strong>Passenger:</strong> Alice Smith</p>
                     <p><strong>Pickup:</strong> 123 Main St, City</p>
                     <p><strong>Drop-off:</strong> 456 Oak Ave, City</p>
@@ -614,7 +612,9 @@
                 }
                 // Load profile data
                 const profile = JSON.parse(localStorage.getItem('driverProfile') || '{}');
-                if (profile.name) document.getElementById('profile-name').textContent = profile.name;
+                const driverName = profile.name || 'John Doe';
+                document.getElementById('profile-name').textContent = driverName;
+                document.getElementById('sos-driver-name').textContent = driverName;
             } catch (e) {
                 alert('Error accessing localStorage: ' + e.message);
                 window.location.href = 'login.html?tab=login';
@@ -662,8 +662,9 @@
         function triggerSOS() {
             try {
                 const profile = JSON.parse(localStorage.getItem('driverProfile') || '{}');
+                const driverName = profile.name || 'John Doe';
                 const sosData = {
-                    driver: profile.name || 'John Doe',
+                    driver: driverName,
                     vehicle: profile.vehicle || 'Toyota Camry, License: XYZ-1234',
                     passenger: 'Alice Smith',
                     pickup: '123 Main St, City',
@@ -675,6 +676,7 @@
                 localStorage.setItem('lastSOS', JSON.stringify(sosData));
                 document.getElementById('sos-time').textContent = sosData.time;
                 document.getElementById('sos-status').textContent = 'Alert Sent: Support contacted, ETA: 5 min';
+                document.getElementById('sos-driver-name').textContent = driverName;
                 alert('SOS triggered! Emergency contacts and admin notified.');
             } catch (e) {
                 alert('Error triggering SOS: ' + e.message);
@@ -718,6 +720,7 @@
                 };
                 localStorage.setItem('driverProfile', JSON.stringify(profile));
                 document.getElementById('profile-name').textContent = profile.name;
+                document.getElementById('sos-driver-name').textContent = profile.name;
                 document.getElementById('profileEditModal').style.display = 'none';
                 alert('Profile updated successfully!');
             } catch (e) {

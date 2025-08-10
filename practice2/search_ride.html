@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideShare - Search Rides</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #dbeafe;
+            margin: 0;
+            padding: 0;
+            color: #374151;
+        }
+        .navbar {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        .search-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+        h1 {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.4em;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+        .search-params {
+            margin-bottom: 20px;
+        }
+        .search-params p {
+            margin: 5px 0;
+            color: #6b7280;
+        }
+        .ride-list {
+            background-color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .ride-item {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .ride-item:last-child {
+            border-bottom: none;
+        }
+        .action-btn {
+            padding: 8px 16px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .action-btn:hover {
+            background-color: #1e40af;
+        }
+        .back-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background-color: #4b5563;
+        }
+        @media (max-width: 768px) {
+            .search-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">RideShare</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="passenger_dashboard.html">Dashboard</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </nav>
+    <div class="search-container">
+        <h1>Search Results</h1>
+        <div class="search-params">
+            <h2>Search Parameters</h2>
+            <p><strong>Pickup:</strong> <span id="pickup"></span></p>
+            <p><strong>Drop-off:</strong> <span id="dropoff"></span></p>
+            <p><strong>Time:</strong> <span id="ride-time"></span></p>
+            <p><strong>Max Price:</strong> $<span id="max-price"></span></p>
+            <p><strong>Seats Required:</strong> <span id="seats"></span></p>
+            <p><strong>Preferences:</strong> <span id="preferences"></span></p>
+        </div>
+        <h2>Available Rides</h2>
+        <div class="ride-list">
+            <div class="ride-item">
+                <p><strong>Driver:</strong> John Smith</p>
+                <p><strong>Vehicle:</strong> Toyota Camry (4 seats)</p>
+                <p><strong>Rating:</strong> ★★★★☆ 4.8</p>
+                <p><strong>Fare:</strong> $15.00</p>
+                <button class="action-btn" onclick="bookRide('ride1')">Book Now</button>
+            </div>
+            <div class="ride-item">
+                <p><strong>Driver:</strong> Sarah Johnson</p>
+                <p><strong>Vehicle:</strong> Honda SUV (6 seats)</p>
+                <p><strong>Rating:</strong> ★★★★★ 4.9</p>
+                <p><strong>Fare:</strong> $20.00</p>
+                <button class="action-btn" onclick="bookRide('ride2')">Book Now</button>
+            </div>
+        </div>
+        <button class="back-btn" onclick="window.location.href='passenger_dashboard.html'">Back to Dashboard</button>
+    </div>
+
+    <script>
+        // Check if user is logged in as passenger
+        document.addEventListener('DOMContentLoaded', function() {
+            const loggedIn = localStorage.getItem('loggedIn');
+            const userRole = localStorage.getItem('userRole');
+            if (loggedIn !== 'true' || userRole !== 'passenger') {
+                window.location.href = 'login.html';
+            } else {
+                // Load search parameters
+                const params = JSON.parse(localStorage.getItem('searchParams') || '{}');
+                document.getElementById('pickup').textContent = params.pickup || 'Not specified';
+                document.getElementById('dropoff').textContent = params.dropoff || 'Not specified';
+                document.getElementById('ride-time').textContent = params.rideTime || 'Not specified';
+                document.getElementById('max-price').textContent = params.maxPrice || 'Any';
+                document.getElementById('seats').textContent = params.seats || 'Any';
+                const preferences = [];
+                if (params.pets) preferences.push('Pets Allowed');
+                if (params.ac) preferences.push('AC');
+                if (params.luggage) preferences.push('Extra Luggage');
+                document.getElementById('preferences').textContent = preferences.length ? preferences.join(', ') : 'None';
+            }
+        });
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        function bookRide(rideId) {
+            alert(`Booked ride ${rideId}. Functionality not fully implemented.`);
+            // Optionally redirect back to passenger dashboard after booking
+            window.location.href = 'passenger_dashboard.html';
+        }
+    </script>
+</body>
+</html>
