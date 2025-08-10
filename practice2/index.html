@@ -488,7 +488,7 @@
                         <div class="form-row">
                             <div class="date-input">
                                 <label class="form-label">Date</label>
-                                <div class="date-display" onclick="document.getElementById('date').click()">
+                                <div class="date-display" tabindex="0" onclick="document.getElementById('date').showPicker()">
                                     <span class="input-icon">📅</span>
                                     <span id="date-text">Today</span>
                                     <span class="dropdown-arrow">▼</span>
@@ -498,7 +498,7 @@
                             
                             <div class="time-input">
                                 <label class="form-label">Time</label>
-                                <div class="time-display" onclick="document.getElementById('time').click()">
+                                <div class="time-display" tabindex="0" onclick="document.getElementById('time').showPicker()">
                                     <span class="input-icon">🕐</span>
                                     <span id="time-text">Now</span>
                                     <span class="dropdown-arrow">▼</span>
@@ -569,19 +569,16 @@
             <h2 class="support-title">Support Chat</h2>
             <div class="support-content">
                 <div class="support-card">
-                   
                     <h3>Live Chat</h3>
                     <p>Chat with our support team in real-time</p>
                     <span class="status">Active</span>
                 </div>
                 <div class="support-card">
-                    
                     <h3>Phone Support</h3>
                     <p>Call us at +91 1800-123-456</p>
                     <span class="status">24/7</span>
                 </div>
                 <div class="support-card">
-                  
                     <h3>Email Support</h3>
                     <p><a href="mailto:support@journeysync.com" class="email">support@journeysync.com</a></p>
                     <span class="status">24-48 hrs</span>
@@ -605,7 +602,8 @@
         }
         function checkLogin(action) {
             try {
-                if (!localStorage.getItem('loggedIn')) {
+                const loggedIn = localStorage.getItem('loggedIn') === 'true';
+                if (!loggedIn) {
                     window.location.href = `login.html?tab=login&action=${action}`;
                 } else {
                     if (action === 'ride') {
@@ -632,7 +630,7 @@
         function initializeDateTime() {
             const now = new Date();
             const today = now.toISOString().split('T')[0];
-            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + Math.floor(now.getMinutes() / 15) * 15 + ':00'; // Round to nearest 15-minute interval
             
             document.getElementById('date').value = today;
             document.getElementById('time').value = currentTime;
@@ -661,7 +659,7 @@
             const timeInput = document.getElementById('time');
             const timeText = document.getElementById('time-text');
             const now = new Date();
-            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + Math.floor(now.getMinutes() / 15) * 15 + ':00';
             
             if (timeInput.value === currentTime || timeInput.value === '') {
                 timeText.textContent = 'Now';
@@ -684,22 +682,32 @@
             // Add event listeners for better functionality
             const dateInput = document.getElementById('date');
             const timeInput = document.getElementById('time');
-            const dateDisplay = document.querySelector('.date-display');
-            const timeDisplay = document.querySelector('.time-display');
+            const dateDisplay = document.querySelector('.date-input .date-display');
+            const timeDisplay = document.querySelector('.time-input .time-display');
             
-            // Trigger native pickers on click
+            // Trigger native pickers on click or focus
             dateDisplay.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                dateInput.focus();
-                dateInput.click();
+                dateInput.showPicker();
+            });
+            dateDisplay.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    dateInput.showPicker();
+                }
             });
             
             timeDisplay.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                timeInput.focus();
-                timeInput.click();
+                timeInput.showPicker();
+            });
+            timeDisplay.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    timeInput.showPicker();
+                }
             });
             
             // Update display when values change
@@ -709,6 +717,7 @@
             // Handle input events for real-time updates
             dateInput.addEventListener('input', updateDateDisplay);
             timeInput.addEventListener('input', updateTimeDisplay);
+            
             // Check for action parameter on page load
             const urlParams = new URLSearchParams(window.location.search);
             const action = urlParams.get('action');

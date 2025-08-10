@@ -42,6 +42,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             max-width: 1200px;
             margin: 20px auto;
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
         h1 {
             font-size: 1.8em;
@@ -68,10 +69,14 @@
         }
         .profile-details {
             flex-grow: 1;
+            min-width: 0; /* Prevent overflow in flex items */
         }
         .profile-details h2 {
             margin: 0;
             font-size: 1.6em;
+            white-space: nowrap; /* Prevent text wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Add ellipsis for long names */
         }
         .star-rating, .verification-badge {
             color: #6b7280;
@@ -112,6 +117,7 @@
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #e5e7eb;
+            overflow-x: auto; /* Allow horizontal scroll if content overflows */
         }
         .ride-item, .feedback-item {
             padding: 10px;
@@ -129,6 +135,7 @@
             cursor: pointer;
             font-size: 0.9em;
             margin-left: 10px;
+            white-space: nowrap; /* Prevent button text wrapping */
         }
         .action-btn:hover {
             background-color: #1e40af;
@@ -199,6 +206,8 @@
             max-width: 500px;
             width: 90%;
             text-align: center;
+            overflow-y: auto; /* Allow vertical scroll if content overflows */
+            max-height: 90vh; /* Limit modal height */
         }
         .sos-modal-content h2 {
             color: #dc2626;
@@ -233,6 +242,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.9em;
+            white-space: nowrap; /* Prevent button text wrapping */
         }
         .emergency-btn:hover {
             background-color: #1e40af;
@@ -258,6 +268,68 @@
         .cancel-sos-btn:hover {
             background-color: #4b5563;
         }
+        /* Profile Edit Modal Styles */
+        .profile-edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-edit-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            overflow-y: auto; /* Allow vertical scroll if content overflows */
+            max-height: 90vh; /* Limit modal height */
+        }
+        .profile-edit-modal-content h2 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.9em;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: #f9fafb;
+            box-sizing: border-box; /* Include padding and border in width calculation */
+            max-width: 100%; /* Ensure it doesn't exceed container */
+        }
+        .save-profile-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .save-profile-btn:hover {
+            background-color: #1e40af;
+        }
         @media (max-width: 768px) {
             .dashboard-container {
                 padding: 20px;
@@ -269,8 +341,23 @@
             .quick-stats, .metrics-grid, .emergency-options {
                 grid-template-columns: 1fr;
             }
-            .sos-modal-content {
+            .sos-modal-content, .profile-edit-modal-content {
                 padding: 15px;
+                width: 95%;
+            }
+            .input-field {
+                font-size: 0.9em; /* Slightly smaller text on mobile */
+            }
+            .action-btn, .emergency-btn {
+                font-size: 0.85em; /* Adjust button text size */
+            }
+        }
+        @media (max-width: 480px) {
+            .input-field {
+                padding: 10px; /* Reduce padding on very small screens */
+            }
+            .profile-details h2 {
+                font-size: 1.3em; /* Smaller name text on mobile */
             }
         }
     </style>
@@ -290,9 +377,10 @@
         <div class="profile-snapshot">
             <div class="profile-photo"></div>
             <div class="profile-details">
-                <h2>John Doe</h2>
+                <h2 id="profile-name">John Doe</h2>
                 <p class="star-rating">★★★★☆ 4.8/5 (120 reviews)</p>
                 <p class="verification-badge">✔ Verified Driver</p>
+                <button class="action-btn" onclick="openProfileEditModal()">Edit Profile</button>
             </div>
         </div>
         <!-- Quick Stats -->
@@ -482,6 +570,36 @@
                 <button class="cancel-sos-btn" onclick="cancelSOS()">Cancel SOS</button>
             </div>
         </div>
+        <!-- Profile Edit Modal -->
+        <div class="profile-edit-modal" id="profileEditModal">
+            <div class="profile-edit-modal-content">
+                <h2>Edit Profile</h2>
+                <div class="input-group">
+                    <label for="edit-name">Name</label>
+                    <input type="text" id="edit-name" class="input-field" value="John Doe">
+                </div>
+                <div class="input-group">
+                    <label for="edit-email">Email</label>
+                    <input type="email" id="edit-email" class="input-field" value="john.doe@example.com">
+                </div>
+                <div class="input-group">
+                    <label for="edit-phone">Phone</label>
+                    <input type="tel" id="edit-phone" class="input-field" value="+91-9876543210">
+                </div>
+                <div class="input-group">
+                    <label for="edit-vehicle">Vehicle Info</label>
+                    <input type="text" id="edit-vehicle" class="input-field" value="Toyota Camry, License: XYZ-1234">
+                </div>
+                <div class="input-group">
+                    <label for="edit-verification">Verification Status</label>
+                    <select id="edit-verification" class="input-field">
+                        <option value="completed">Completed</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+                <button class="save-profile-btn" onclick="saveProfile()">Save Changes</button>
+            </div>
+        </div>
     </div>
     <script>
         // Check if user is logged in as driver
@@ -494,6 +612,9 @@
                     alert('Please log in as a driver to access the dashboard.');
                     window.location.href = 'login.html?tab=login';
                 }
+                // Load profile data
+                const profile = JSON.parse(localStorage.getItem('driverProfile') || '{}');
+                if (profile.name) document.getElementById('profile-name').textContent = profile.name;
             } catch (e) {
                 alert('Error accessing localStorage: ' + e.message);
                 window.location.href = 'login.html?tab=login';
@@ -540,9 +661,10 @@
 
         function triggerSOS() {
             try {
+                const profile = JSON.parse(localStorage.getItem('driverProfile') || '{}');
                 const sosData = {
-                    driver: 'John Doe',
-                    vehicle: 'Toyota Camry, License: XYZ-1234',
+                    driver: profile.name || 'John Doe',
+                    vehicle: profile.vehicle || 'Toyota Camry, License: XYZ-1234',
                     passenger: 'Alice Smith',
                     pickup: '123 Main St, City',
                     dropoff: '456 Oak Ave, City',
@@ -550,7 +672,6 @@
                     time: new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
                     location: 'Current Location (GPS)'
                 };
-                // Simulate saving SOS data
                 localStorage.setItem('lastSOS', JSON.stringify(sosData));
                 document.getElementById('sos-time').textContent = sosData.time;
                 document.getElementById('sos-status').textContent = 'Alert Sent: Support contacted, ETA: 5 min';
@@ -565,7 +686,6 @@
                 alert(`Calling ${type} not implemented. Requires backend integration.`);
             } else {
                 alert(`Simulating call to ${type} at ${number}.`);
-                // In a real app, use: window.location.href = `tel:${number}`;
             }
         }
 
@@ -573,6 +693,35 @@
             if (confirm('Are you sure you want to cancel the SOS alert?')) {
                 document.getElementById('sos-status').textContent = 'SOS cancelled.';
                 document.getElementById('sosModal').style.display = 'none';
+            }
+        }
+
+        // Profile Edit Modal Handling
+        function openProfileEditModal() {
+            const profile = JSON.parse(localStorage.getItem('driverProfile') || '{}');
+            document.getElementById('edit-name').value = profile.name || 'John Doe';
+            document.getElementById('edit-email').value = profile.email || 'john.doe@example.com';
+            document.getElementById('edit-phone').value = profile.phone || '+91-9876543210';
+            document.getElementById('edit-vehicle').value = profile.vehicle || 'Toyota Camry, License: XYZ-1234';
+            document.getElementById('edit-verification').value = profile.verification || 'completed';
+            document.getElementById('profileEditModal').style.display = 'flex';
+        }
+
+        function saveProfile() {
+            try {
+                const profile = {
+                    name: document.getElementById('edit-name').value,
+                    email: document.getElementById('edit-email').value,
+                    phone: document.getElementById('edit-phone').value,
+                    vehicle: document.getElementById('edit-vehicle').value,
+                    verification: document.getElementById('edit-verification').value
+                };
+                localStorage.setItem('driverProfile', JSON.stringify(profile));
+                document.getElementById('profile-name').textContent = profile.name;
+                document.getElementById('profileEditModal').style.display = 'none';
+                alert('Profile updated successfully!');
+            } catch (e) {
+                alert('Error saving profile: ' + e.message);
             }
         }
     </script>
