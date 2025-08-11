@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RideShare - Passenger Dashboard</title>
+    <title>RideShare - Driver Dashboard</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -19,6 +19,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .nav-brand {
             font-size: 1.5em;
@@ -39,6 +42,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             max-width: 1200px;
             margin: 20px auto;
+            overflow-x: hidden;
         }
         h1 {
             font-size: 1.8em;
@@ -65,10 +69,14 @@
         }
         .profile-details {
             flex-grow: 1;
+            min-width: 0;
         }
         .profile-details h2 {
             margin: 0;
             font-size: 1.6em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .star-rating, .verification-badge {
             color: #6b7280;
@@ -101,36 +109,21 @@
             color: #6b7280;
             font-size: 0.9em;
         }
-        .ride-booking-section, .rides-section, .history-section, .safety-section, .payments-section, .ratings-section, .rewards-section {
+        .ride-section, .earnings-section, .safety-section, .ratings-section, .growth-section {
             margin-bottom: 30px;
         }
-        .ride-search {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-            align-items: center;
-        }
-        .input-field {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 1em;
-            background-color: #f9fafb;
-            box-sizing: border-box;
-        }
-        .ride-list, .feedback-list, .payment-list {
+        .ride-list, .feedback-list {
             background-color: #f9fafb;
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #e5e7eb;
+            overflow-x: auto;
         }
-        .ride-item, .feedback-item, .payment-item {
+        .ride-item, .feedback-item {
             padding: 10px;
             border-bottom: 1px solid #e5e7eb;
         }
-        .ride-item:last-child, .feedback-item:last-child, .payment-item:last-child {
+        .ride-item:last-child, .feedback-item:last-child {
             border-bottom: none;
         }
         .action-btn {
@@ -142,11 +135,12 @@
             cursor: pointer;
             font-size: 0.9em;
             margin-left: 10px;
+            white-space: nowrap;
         }
         .action-btn:hover {
             background-color: #1e40af;
         }
-        .book-ride-btn {
+        .post-ride-btn {
             width: 100%;
             padding: 12px;
             background-color: #1e3a8a;
@@ -156,10 +150,9 @@
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
-            box-sizing: border-box;
+            margin-bottom: 20px;
         }
-        .book-ride-btn:hover {
+        .post-ride-btn:hover {
             background-color: #1e40af;
         }
         .sos-btn {
@@ -193,24 +186,6 @@
         .support-link:hover {
             text-decoration: underline;
         }
-        .filters {
-            margin-bottom: 20px;
-        }
-        .filters label {
-            margin-right: 10px;
-            font-size: 0.9em;
-        }
-        .active-ride-map {
-            height: 200px;
-            background-color: #e5e7eb;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6b7280;
-        }
-        /* SOS Modal Styles */
         .sos-modal {
             display: none;
             position: fixed;
@@ -292,6 +267,67 @@
         .cancel-sos-btn:hover {
             background-color: #4b5563;
         }
+        .profile-edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-edit-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        .profile-edit-modal-content h2 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.9em;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: #f9fafb;
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+        .save-profile-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .save-profile-btn:hover {
+            background-color: #1e40af;
+        }
         @media (max-width: 768px) {
             .dashboard-container {
                 padding: 20px;
@@ -300,15 +336,26 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .quick-stats, .metrics-grid, .ride-search, .emergency-options {
+            .quick-stats, .metrics-grid, .emergency-options {
                 grid-template-columns: 1fr;
             }
-            .book-ride-btn {
-                margin-top: 10px;
-            }
-            .sos-modal-content {
+            .sos-modal-content, .profile-edit-modal-content {
                 padding: 15px;
                 width: 95%;
+            }
+            .input-field {
+                font-size: 0.9em;
+            }
+            .action-btn, .emergency-btn {
+                font-size: 0.85em;
+            }
+        }
+        @media (max-width: 480px) {
+            .input-field {
+                padding: 10px;
+            }
+            .profile-details h2 {
+                font-size: 1.3em;
             }
         }
     </style>
@@ -318,197 +365,173 @@
         <div class="nav-brand">RideShare</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            <a href="passenger_dashboard.html">Dashboard</a>
+            <a href="driver_dashboard.html">Dashboard</a>
             <a href="#" onclick="logout()">Logout</a>
         </div>
     </nav>
     <div class="dashboard-container">
-        <h1>Passenger Dashboard</h1>
-
-        <!-- Passenger Overview -->
+        <h1>Driver Dashboard</h1>
+        <!-- Profile Snapshot -->
         <div class="profile-snapshot">
             <div class="profile-photo"></div>
             <div class="profile-details">
-                <h2 id="passenger-name">Jane Doe</h2>
-                <p class="star-rating">★★★★☆ 4.7/5 (80 reviews)</p>
-                <p class="verification-badge">✔ Verified Passenger</p>
+                <h2 id="profile-name">John Doe</h2>
+                <p class="star-rating">★★★★☆ 4.8/5 (120 reviews)</p>
+                <p class="verification-badge">✔ Verified Driver</p>
+                <button class="action-btn" onclick="openProfileEditModal()">Edit Profile</button>
             </div>
         </div>
-
         <!-- Quick Stats -->
         <div class="quick-stats">
             <div class="stat-card">
-                <h3>320</h3>
-                <p>Total Rides Taken</p>
+                <h3>1,245</h3>
+                <p>Total Rides Completed</p>
             </div>
             <div class="stat-card">
-                <h3>12</h3>
-                <p>Trips This Month</p>
+                <h3>$1,230</h3>
+                <p>Earnings This Month</p>
             </div>
             <div class="stat-card">
-                <h3>150</h3>
-                <p>Loyalty Points</p>
+                <h3>Top Driver</h3>
+                <p>Rank #3 in Region</p>
             </div>
         </div>
-
-        <!-- Ride Booking Section -->
-        <div class="ride-booking-section">
-            <h2>Search for Rides</h2>
-            <div class="ride-search">
-                <input type="text" class="input-field" placeholder="Pickup Location" id="pickup-location">
-                <input type="text" class="input-field" placeholder="Drop-off Location" id="drop-location">
-                <input type="datetime-local" class="input-field" id="ride-time">
-                <button class="book-ride-btn" onclick="searchRides()">Search Rides</button>
-            </div>
-            <div class="filters">
-                <h3>Advanced Filters</h3>
-                <label>Price Range: <input type="number" class="input-field" placeholder="Max Price"></label>
-                <label>Seats: <input type="number" class="input-field" placeholder="Seats Required"></label>
-                <label><input type="checkbox" id="pets-allowed"> Pets Allowed</label>
-                <label><input type="checkbox" id="ac"> AC</label>
-                <label><input type="checkbox" id="luggage"> Extra Luggage</label>
-            </div>
-            <h2>Available Rides</h2>
-            <div class="ride-list">
-                <div class="ride-item">
-                    <p><strong>Driver:</strong> John Smith</p>
-                    <p><strong>Vehicle:</strong> Toyota Camry (4 seats)</p>
-                    <p><strong>Rating:</strong> ★★★★☆ 4.8</p>
-                    <p><strong>Fare:</strong> $15.00</p>
-                    <button class="action-btn" onclick="bookRide('ride1')">Book Now</button>
-                </div>
-                <div class="ride-item">
-                    <p><strong>Driver:</strong> Sarah Johnson</p>
-                    <p><strong>Vehicle:</strong> Honda SUV (6 seats)</p>
-                    <p><strong>Rating:</strong> ★★★★★ 4.9</p>
-                    <p><strong>Fare:</strong> $20.00</p>
-                    <button class="action-btn" onclick="bookRide('ride2')">Book Now</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Upcoming & Active Rides -->
-        <div class="rides-section">
-            <h2>Active Ride</h2>
-            <div class="ride-list">
-                <div class="ride-item">
-                    <p><strong>Driver:</strong> Mike Brown</p>
-                    <p><strong>Vehicle:</strong> Ford Sedan (MH-12-AB-1234)</p>
-                    <p><strong>Route:</strong> 123 Main St to 456 Oak Ave</p>
-                    <p><strong>Estimated Arrival:</strong> 15 min</p>
-                    <div class="active-ride-map">Map Placeholder (Live Tracking Not Implemented)</div>
-                    <button class="action-btn" onclick="cancelRide('active1')">Cancel Ride</button>
-                    <p><small>Cancellation may incur a fee as per policy.</small></p>
-                </div>
-            </div>
+        <!-- Ride Management -->
+        <div class="ride-section">
             <h2>Upcoming Rides</h2>
+            <button class="post-ride-btn" onclick="window.location.href='post_ride.html'">Post a Ride</button>
             <div class="ride-list">
                 <div class="ride-item">
-                    <p><strong>Driver:</strong> Alice Wilson</p>
-                    <p><strong>Pickup:</strong> 789 Pine Rd</p>
-                    <p><strong>Drop-off:</strong> 101 Elm St</p>
-                    <p><strong>Time:</strong> 08/10/2025, 10:00 AM</p>
-                    <button class="action-btn" onclick="cancelRide('upcoming1')">Cancel</button>
+                    <p><strong>Passenger:</strong> Alice Smith</p>
+                    <p><strong>Pickup:</strong> 123 Main St, City</p>
+                    <p><strong>Drop-off:</strong> 456 Oak Ave, City</p>
+                    <p><strong>Time:</strong> 08/09/2025, 2:00 PM</p>
+                    <button class="action-btn" onclick="editRide('Alice Smith', '123 Main St, City', '456 Oak Ave, City', '2025-08-09T14:00')">Edit</button>
+                    <button class="action-btn" onclick="alert('Cancel ride not implemented.')">Cancel</button>
+                </div>
+                <div class="ride-item">
+                    <p><strong>Passenger:</strong> Bob Johnson</p>
+                    <p><strong>Pickup:</strong> 789 Pine Rd, City</p>
+                    <p><strong>Drop-off:</strong> 101 Elm St, City</p>
+                    <p><strong>Time:</strong> 08/09/2025, 4:30 PM</p>
+                    <button class="action-btn" onclick="editRide('Bob Johnson', '789 Pine Rd, City', '101 Elm St, City', '2025-08-09T16:30')">Edit</button>
+                    <button class="action-btn" onclick="alert('Cancel ride not implemented.')">Cancel</button>
+                </div>
+            </div>
+            <h2>Past Rides</h2>
+            <div class="ride-list">
+                <div class="ride-item">
+                    <p><strong>Passenger:</strong> Emma Wilson</p>
+                    <p><strong>Earnings:</strong> $25.50</p>
+                    <p><strong>Rating:</strong> ★★★★★</p>
+                    <p><strong>Feedback:</strong> Great ride, very professional!</p>
+                    <button class="action-btn" onclick="alert('Re-book route not implemented.')">Re-book Route</button>
                 </div>
             </div>
         </div>
-
-        <!-- Ride History -->
-        <div class="history-section">
-            <h2>Ride History</h2>
-            <div class="ride-list">
-                <div class="ride-item">
-                    <p><strong>Date:</strong> 08/01/2025</p>
-                    <p><strong>Route:</strong> 456 Oak Ave to 123 Main St</p>
-                    <p><strong>Driver Rating:</strong> ★★★★★</p>
-                    <p><strong>Feedback Given:</strong> Smooth and safe ride!</p>
-                    <p><strong>Fare:</strong> $18.00 (Paid via UPI)</p>
-                    <button class="action-btn" onclick="rebookRoute('route1')">Re-book Route</button>
+        <!-- Performance & Earnings -->
+        <div class="earnings-section">
+            <h2>Earnings Overview</h2>
+            <div class="metrics-grid">
+                <div class="stat-card">
+                    <h3>$85</h3>
+                    <p>Today's Earnings</p>
+                </div>
+                <div class="stat-card">
+                    <h3>$450</h3>
+                    <p>Weekly Earnings</p>
+                </div>
+                <div class="stat-card">
+                    <h3>$12.50</h3>
+                    <p>Average Revenue per Ride</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending</h3>
+                    <p>Payment Status</p>
+                </div>
+            </div>
+            <h2>Performance Metrics</h2>
+            <div class="metrics-grid">
+                <div class="stat-card">
+                    <h3>95%</h3>
+                    <p>Booking Success Rate</p>
+                </div>
+                <div class="stat-card">
+                    <h3>2%</h3>
+                    <p>Cancellation Rate</p>
+                </div>
+                <div class="stat-card">
+                    <h3>3 min</h3>
+                    <p>Average Response Time</p>
                 </div>
             </div>
         </div>
-
-        <!-- Safety & SOS -->
+        <!-- Safety & Support -->
         <div class="safety-section">
-            <h2>Safety & SOS</h2>
+            <h2>Safety & Support</h2>
             <button class="sos-btn" onclick="openSOSModal()">SOS Center</button>
-            <p><a href="#" class="support-link" onclick="shareLocation()">Share Live Location</a></p>
-            <p><a href="#" class="support-link" onclick="callSupport()">Call Support/Police</a></p>
-            <p><strong>Emergency Details:</strong> Auto-sent to support during SOS</p>
-        </div>
-
-        <!-- Payments & Wallet -->
-        <div class="payments-section">
-            <h2>Payments & Wallet</h2>
-            <div class="payment-list">
-                <div class="payment-item">
-                    <p><strong>Date:</strong> 08/01/2025</p>
-                    <p><strong>Amount:</strong> $18.00</p>
-                    <p><strong>Status:</strong> Completed (UPI)</p>
-                </div>
-                <div class="payment-item">
-                    <p><strong>Date:</strong> 07/30/2025</p>
-                    <p><strong>Amount:</strong> $10.00</p>
-                    <p><strong>Status:</strong> Refunded (Canceled Ride)</p>
+            <p><strong>Verification Status:</strong> Completed</p>
+            <p><a href="#" class="support-link" onclick="alert('Support chat not implemented.')">Contact Support</a></p>
+            <div class="ride-list">
+                <div class="ride-item">
+                    <p><strong>SOS Incident:</strong> 08/01/2025</p>
+                    <p><strong>Status:</strong> Resolved</p>
                 </div>
             </div>
-            <button class="action-btn" onclick="addPaymentMethod()">Add Payment Method</button>
         </div>
-
         <!-- Ratings & Feedback -->
         <div class="ratings-section">
             <h2>Ratings & Feedback</h2>
             <div class="metrics-grid">
                 <div class="stat-card">
-                    <h3>4.7/5</h3>
+                    <h3>4.8/5</h3>
                     <p>Average Rating</p>
                 </div>
                 <div class="stat-card">
-                    <h3>4.8/5</h3>
+                    <h3>4.9/5</h3>
                     <p>Last Week</p>
+                </div>
+                <div class="stat-card">
+                    <h3>4.7/5</h3>
+                    <p>Last Month</p>
                 </div>
             </div>
             <div class="feedback-list">
                 <div class="feedback-item">
-                    <p><strong>Driver:</strong> John Smith</p>
-                    <p><strong>Your Rating:</strong> ★★★★★</p>
-                    <p><strong>Your Comment:</strong> Very friendly driver!</p>
+                    <p><strong>Passenger:</strong> Emma Wilson</p>
+                    <p><strong>Rating:</strong> ★★★★★</p>
+                    <p><strong>Comment:</strong> Very punctual and friendly!</p>
                 </div>
                 <div class="feedback-item">
-                    <p><strong>Driver:</strong> Sarah Johnson</p>
-                    <p><strong>Rating Received:</strong> ★★★★☆</p>
-                    <p><strong>Comment:</strong> Polite passenger, great communication.</p>
-                </div>
-            </div>
-            <button class="action-btn" onclick="rateDriver('ride1')">Rate Last Ride</button>
-        </div>
-
-        <!-- Growth & Rewards -->
-        <div class="rewards-section">
-            <h2>Growth & Rewards</h2>
-            <p><strong>Referral Program:</strong> Share your link to earn $5 per signup.</p>
-            <button class="action-btn" onclick="shareReferral()">Share Referral Link</button>
-            <p><strong>Referral Conversions:</strong> 3 friends joined</p>
-            <p><strong>Coupons:</strong> 10% off next ride (Code: RIDENOW10)</p>
-            <h2>Loyalty Badges</h2>
-            <div class="metrics-grid">
-                <div class="stat-card">
-                    <h3>10 Trips</h3>
-                    <p>Loyal Rider Badge</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Frequent Traveler</h3>
-                    <p>5 Rides in a Week</p>
+                    <p><strong>Passenger:</strong> Mike Brown</p>
+                    <p><strong>Rating:</strong> ★★★★☆</p>
+                    <p><strong>Comment:</strong> Smooth ride, could improve music choice.</p>
                 </div>
             </div>
         </div>
-
         <!-- Technical/Health Notifications -->
         <div class="notification">
             <p><strong>App Update Available:</strong> Version 2.1.3 - Please update for improved performance.</p>
             <p><strong>Connection Status:</strong> GPS and Internet stable</p>
         </div>
-
+        <!-- Growth & Rewards -->
+        <div class="growth-section">
+            <h2>Growth & Rewards</h2>
+            <p><strong>Referral Program:</strong> Share your link to earn $10 per signup.</p>
+            <button class="action-btn" onclick="alert('Referral link copied!')">Share Referral Link</button>
+            <p><strong>Referral Conversions:</strong> 5 drivers joined</p>
+            <h2>Driver Achievements</h2>
+            <div class="metrics-grid">
+                <div class="stat-card">
+                    <h3>100 Rides</h3>
+                    <p>Milestone Badge</p>
+                </div>
+                <div class="stat-card">
+                    <h3>5-Star Streak</h3>
+                    <p>10 Consecutive 5-Star Rides</p>
+                </div>
+            </div>
+        </div>
         <!-- SOS Modal -->
         <div class="sos-modal" id="sosModal">
             <div class="sos-modal-content">
@@ -522,9 +545,8 @@
                 </div>
                 <div class="alert-details">
                     <h3>Alert Details</h3>
-                    <p><strong>Passenger:</strong> <span id="sos-passenger">Jane Doe</span></p>
-                    <p><strong>Driver:</strong> Mike Brown</p>
-                    <p><strong>Vehicle:</strong> Ford Sedan (MH-12-AB-1234)</p>
+                    <p><strong>Driver:</strong> <span id="sos-driver-name">John Doe</span> (Vehicle: Toyota Camry, License: XYZ-1234)</p>
+                    <p><strong>Passenger:</strong> Alice Smith</p>
                     <p><strong>Pickup:</strong> 123 Main St, City</p>
                     <p><strong>Drop-off:</strong> 456 Oak Ave, City</p>
                     <p><strong>Ride ID:</strong> RS123456</p>
@@ -546,83 +568,77 @@
                 <button class="cancel-sos-btn" onclick="cancelSOS()">Cancel SOS</button>
             </div>
         </div>
+        <!-- Profile Edit Modal -->
+        <div class="profile-edit-modal" id="profileEditModal">
+            <div class="profile-edit-modal-content">
+                <h2>Edit Profile</h2>
+                <div class="input-group">
+                    <label for="edit-name">Name</label>
+                    <input type="text" id="edit-name" class="input-field" value="John Doe">
+                </div>
+                <div class="input-group">
+                    <label for="edit-email">Email</label>
+                    <input type="email" id="edit-email" class="input-field" value="john.doe@example.com">
+                </div>
+                <div class="input-group">
+                    <label for="edit-phone">Phone</label>
+                    <input type="tel" id="edit-phone" class="input-field" value="+91-9876543210">
+                </div>
+                <div class="input-group">
+                    <label for="edit-vehicle">Vehicle Info</label>
+                    <input type="text" id="edit-vehicle" class="input-field" value="Toyota Camry, License: XYZ-1234">
+                </div>
+                <div class="input-group">
+                    <label for="edit-verification">Verification Status</label>
+                    <select id="edit-verification" class="input-field">
+                        <option value="completed">Completed</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+                <button class="save-profile-btn" onclick="saveProfile()">Save Changes</button>
+            </div>
+        </div>
     </div>
-
     <script>
-        // Check if user is logged in as passenger
+        // Check if user is logged in as driver
         document.addEventListener('DOMContentLoaded', function() {
-            const loggedIn = localStorage.getItem('loggedIn');
-            const userRole = localStorage.getItem('userRole');
-            const passengerName = localStorage.getItem('passengerName') || 'Jane Doe';
-            if (loggedIn !== 'true' || userRole !== 'passenger') {
-                window.location.href = 'login.html';
-            } else {
-                document.getElementById('passenger-name').textContent = passengerName;
-                document.getElementById('sos-passenger').textContent = passengerName;
+            try {
+                const loggedIn = localStorage.getItem('loggedIn');
+                const userRole = localStorage.getItem('userRole');
+                console.log('Logged In:', loggedIn, 'User Role:', userRole);
+                if (loggedIn !== 'true' || userRole !== 'driver') {
+                    alert('Please log in as a driver to access the dashboard.');
+                    window.location.href = 'login.html?tab=login';
+                }
+                // Load profile data
+                const profile = JSON.parse(localStorage.getItem('driverProfile') || '{}');
+                const driverName = profile.name || 'John Doe';
+                document.getElementById('profile-name').textContent = driverName;
+                document.getElementById('sos-driver-name').textContent = driverName;
+            } catch (e) {
+                alert('Error accessing localStorage: ' + e.message);
+                window.location.href = 'login.html?tab=login';
             }
         });
 
         function logout() {
-            localStorage.clear();
-            window.location.href = 'login.html';
+            try {
+                localStorage.clear();
+                window.location.href = 'login.html?tab=login';
+            } catch (e) {
+                alert('Error clearing localStorage: ' + e.message);
+                window.location.href = 'login.html?tab=login';
+            }
         }
 
-        function searchRides() {
-            const pickup = document.getElementById('pickup-location').value;
-            const dropoff = document.getElementById('drop-location').value;
-            const rideTime = document.getElementById('ride-time').value;
-            const maxPrice = document.querySelector('.filters input[type="number"][placeholder="Max Price"]').value;
-            const seats = document.querySelector('.filters input[type="number"][placeholder="Seats Required"]').value;
-            const pets = document.getElementById('pets-allowed').checked;
-            const ac = document.getElementById('ac').checked;
-            const luggage = document.getElementById('luggage').checked;
-
-            // Store search parameters in localStorage
-            localStorage.setItem('searchParams', JSON.stringify({
-                pickup,
-                dropoff,
-                rideTime,
-                maxPrice,
-                seats,
-                pets,
-                ac,
-                luggage
-            }));
-
-            // Redirect to search ride page
-            window.location.href = 'search_ride.html';
-        }
-
-        function bookRide(rideId) {
-            alert(Booked ride ${rideId}. Functionality not fully implemented.);
-        }
-
-        function cancelRide(rideId) {
-            alert(Cancelled ride ${rideId}. Functionality not fully implemented.);
-        }
-
-        function rebookRoute(routeId) {
-            alert(Re-booked route ${routeId}. Functionality not fully implemented.);
-        }
-
-        function shareLocation() {
-            alert('Location sharing not implemented.');
-        }
-
-        function callSupport() {
-            alert('Calling support/police not implemented.');
-        }
-
-        function addPaymentMethod() {
-            alert('Add payment method functionality not implemented.');
-        }
-
-        function rateDriver(rideId) {
-            alert(Rating driver for ride ${rideId} not implemented.);
-        }
-
-        function shareReferral() {
-            alert('Referral link copied!');
+        function editRide(passenger, pickup, dropoff, time) {
+            try {
+                const rideData = { passenger, pickup, dropoff, time };
+                localStorage.setItem('editRide', JSON.stringify(rideData));
+                window.location.href = 'edit_ride.html';
+            } catch (e) {
+                alert('Error preparing ride data: ' + e.message);
+            }
         }
 
         // SOS Modal Handling
@@ -645,20 +661,22 @@
 
         function triggerSOS() {
             try {
-                const passengerName = localStorage.getItem('passengerName') || 'Jane Doe';
+                const profile = JSON.parse(localStorage.getItem('driverProfile') || '{}');
+                const driverName = profile.name || 'John Doe';
                 const sosData = {
-                    passenger: passengerName,
-                    driver: 'Mike Brown',
-                    vehicle: 'Ford Sedan (MH-12-AB-1234)',
+                    driver: driverName,
+                    vehicle: profile.vehicle || 'Toyota Camry, License: XYZ-1234',
+                    passenger: 'Alice Smith',
                     pickup: '123 Main St, City',
                     dropoff: '456 Oak Ave, City',
                     rideId: 'RS123456',
                     time: new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),
                     location: 'Current Location (GPS)'
                 };
-                localStorage.setItem('lastPassengerSOS', JSON.stringify(sosData));
+                localStorage.setItem('lastSOS', JSON.stringify(sosData));
                 document.getElementById('sos-time').textContent = sosData.time;
                 document.getElementById('sos-status').textContent = 'Alert Sent: Support contacted, ETA: 5 min';
+                document.getElementById('sos-driver-name').textContent = driverName;
                 alert('SOS triggered! Emergency contacts and admin notified.');
             } catch (e) {
                 alert('Error triggering SOS: ' + e.message);
@@ -667,9 +685,9 @@
 
         function callEmergency(type, number) {
             if (number === 'admin' || number === 'trusted') {
-                alert(Calling ${type} not implemented. Requires backend integration.);
+                alert(`Calling ${type} not implemented. Requires backend integration.`);
             } else {
-                alert(Simulating call to ${type} at ${number}.);
+                alert(`Simulating call to ${type} at ${number}.`);
             }
         }
 
@@ -677,6 +695,36 @@
             if (confirm('Are you sure you want to cancel the SOS alert?')) {
                 document.getElementById('sos-status').textContent = 'SOS cancelled.';
                 document.getElementById('sosModal').style.display = 'none';
+            }
+        }
+
+        // Profile Edit Modal Handling
+        function openProfileEditModal() {
+            const profile = JSON.parse(localStorage.getItem('driverProfile') || '{}');
+            document.getElementById('edit-name').value = profile.name || 'John Doe';
+            document.getElementById('edit-email').value = profile.email || 'john.doe@example.com';
+            document.getElementById('edit-phone').value = profile.phone || '+91-9876543210';
+            document.getElementById('edit-vehicle').value = profile.vehicle || 'Toyota Camry, License: XYZ-1234';
+            document.getElementById('edit-verification').value = profile.verification || 'completed';
+            document.getElementById('profileEditModal').style.display = 'flex';
+        }
+
+        function saveProfile() {
+            try {
+                const profile = {
+                    name: document.getElementById('edit-name').value,
+                    email: document.getElementById('edit-email').value,
+                    phone: document.getElementById('edit-phone').value,
+                    vehicle: document.getElementById('edit-vehicle').value,
+                    verification: document.getElementById('edit-verification').value
+                };
+                localStorage.setItem('driverProfile', JSON.stringify(profile));
+                document.getElementById('profile-name').textContent = profile.name;
+                document.getElementById('sos-driver-name').textContent = profile.name;
+                document.getElementById('profileEditModal').style.display = 'none';
+                alert('Profile updated successfully!');
+            } catch (e) {
+                alert('Error saving profile: ' + e.message);
             }
         }
     </script>

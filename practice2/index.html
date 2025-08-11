@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RideShare</title>
@@ -306,30 +305,6 @@
         .stats-table tr:nth-child(even) {
             background-color: #f9fafb;
         }
-
-        .business-charts {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-
-        .chart-container {
-            background: white;
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.1);
-            border-radius: 12px;
-            padding: 20px;
-            width: 300px;
-            text-align: center;
-        }
-
-        .chart-container h3 {
-            color: #1e3a8a;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
         
         /* Support Section */
         .support-section {
@@ -462,68 +437,18 @@
                 margin: 0 8px;
             }
             
-           .support-content {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                gap: 40px;
-                flex-wrap: nowrap; /* keep cards in one line */
-                overflow-x: auto; /* optional: horizontal scroll if overflow */
+            .support-content {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
             }
-
+            
             .support-card {
-                flex: 1 1 250px; /* allow shrinking and growing, base width 250px */
-                max-width: 300px; /* max width */
-                min-width: 200px; /* minimum width so cards stay readable */
-                box-sizing: border-box;
+                max-width: 100%;
+                margin: 0;
+                padding: 24px;
             }
         }
-        .time-dropdown {
-            border: 1px solid #ccc;
-            background: white;
-            position: absolute;
-            margin-top: 5px;
-            border-radius: 5px;
-            box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
-            z-index: 10;
-            max-height: 200px; /* scroll if too many times */
-            overflow-y: auto;
-        }
-
-        .time-option {
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-
-        .time-option:hover {
-            background: #f0f0f0;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .status-btn {
-            background-color: #22c55e;  /* matching your site’s blue */
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 0.9rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .status-btn:hover {
-            background-color: #16a34a;
-            text-decoration: none;
-            color: white;
-        }
-
-
     </style>
 </head>
 <body>
@@ -573,14 +498,13 @@
                             
                             <div class="time-input">
                                 <label class="form-label">Time</label>
-                                <div class="time-display" tabindex="0" onclick="toggleTimeDropdown()">
+                                <div class="time-display" tabindex="0" onclick="document.getElementById('time').showPicker()">
                                     <span class="input-icon">🕐</span>
-                                    <span id="time-text">Select time</span>
+                                    <span id="time-text">Now</span>
                                     <span class="dropdown-arrow">▼</span>
+                                    <input type="time" id="time" class="hidden-time-input" step="300" onchange="updateTimeDisplay()">
                                 </div>
-                                <div id="time-dropdown" class="time-dropdown hidden"></div>
                             </div>
-
                         </div>
                         
                         <button type="button" class="see-prices-btn" onclick="navigateToRideLogin()">
@@ -612,24 +536,33 @@
         <!-- Business Stats Section -->
         <div id="business" class="section stats-section">
             <h2>Business Stats</h2>
-            
-            <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-around;">
-                <div style="flex: 1; min-width: 300px; max-width: 400px;">
-                    <h3 style="color:#1e3a8a; text-align:center;">Revenue (USD)</h3>
-                    <canvas id="revenueChart"></canvas>
-                </div>
-                <div style="flex: 1; min-width: 300px; max-width: 400px;">
-                    <h3 style="color:#1e3a8a; text-align:center;">Active Drivers</h3>
-                    <canvas id="driversChart"></canvas>
-                </div>
-                <div style="flex: 1; min-width: 300px; max-width: 400px;">
-                    <h3 style="color:#1e3a8a; text-align:center;">Total Rides</h3>
-                    <canvas id="ridesChart"></canvas>
-                </div>
-            </div>
+            <table class="stats-table">
+                <tr>
+                    <th>Year</th>
+                    <th>Total Rides</th>
+                    <th>Revenue (USD)</th>
+                    <th>Active Drivers</th>
+                </tr>
+                <tr>
+                    <td>2023</td>
+                    <td>10,000</td>
+                    <td>500,000</td>
+                    <td>200</td>
+                </tr>
+                <tr>
+                    <td>2024</td>
+                    <td>15,000</td>
+                    <td>750,000</td>
+                    <td>300</td>
+                </tr>
+                <tr>
+                    <td>2025</td>
+                    <td>20,000</td>
+                    <td>1,000,000</td>
+                    <td>400</td>
+                </tr>
+            </table>
         </div>
-
-
         
         <!-- Support Section -->
         <div class="support-section">
@@ -638,24 +571,20 @@
                 <div class="support-card">
                     <h3>Live Chat</h3>
                     <p>Chat with our support team in real-time</p>
-                    <button class="status-btn" onclick="openLiveChat()">Active</button>
+                    <span class="status">Active</span>
                 </div>
                 <div class="support-card">
                     <h3>Phone Support</h3>
-                    <p>Call us at <a href="tel:+911800123456" class="phone">+91 1800-123-456</a></p>
-                    <a href="tel:+911800123456" class="status-btn">24/7</a>
+                    <p>Call us at +91 1800-123-456</p>
+                    <span class="status">24/7</span>
                 </div>
                 <div class="support-card">
                     <h3>Email Support</h3>
-                    <p>
-                    <a href="mailto:support@journeysync.com" class="email">support@journeysync.com</a>
-                    </p>
-                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@journeysync.com" target="_blank" class="status-btn">24-48 hrs</a>
+                    <p><a href="mailto:support@journeysync.com" class="email">support@journeysync.com</a></p>
+                    <span class="status">24-48 hrs</span>
                 </div>
-
             </div>
         </div>
-
     </div>
     
     <!-- Copyright Section -->
@@ -809,151 +738,6 @@
                 }
             });
         });
-
-        function toggleTimeDropdown() {
-            document.getElementById("time-dropdown").classList.toggle("hidden");
-        }
-
-        function selectTime(time) {
-            document.getElementById("time-text").textContent = time;
-            document.getElementById("time-dropdown").classList.add("hidden");
-        }
-
-        function selectNow() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const currentTime = `${hours}:${minutes}`;
-            selectTime(currentTime);
-        }
-
-        function generateTimeOptions() {
-            const dropdown = document.getElementById("time-dropdown");
-            dropdown.innerHTML = ''; // clear old items
-
-            // First option: Now
-            const nowOption = document.createElement("div");
-            nowOption.className = "time-option";
-            nowOption.textContent = "Now";
-            nowOption.onclick = selectNow; // 🔹 set to current time when clicked
-            dropdown.appendChild(nowOption);
-
-            // Generate times every 5 minutes
-            for (let h = 0; h < 24; h++) {
-                for (let m = 0; m < 60; m += 5) {
-                    const time = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-                    const option = document.createElement("div");
-                    option.className = "time-option";
-                    option.textContent = time;
-                    option.onclick = () => selectTime(time);
-                    dropdown.appendChild(option);
-                }
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", function(event) {
-            const dropdown = document.getElementById("time-dropdown");
-            const display = document.querySelector(".time-display");
-            if (!display.contains(event.target)) {
-                dropdown.classList.add("hidden");
-            }
-        });
-
-        // Generate time list on page load
-        window.onload = generateTimeOptions;
-
-        const years = ['2023', '2024', '2025'];
-
-        // Revenue Line Chart
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        const revenueChart = new Chart(revenueCtx, {
-            type: 'line',
-            data: {
-            labels: years,
-            datasets: [{
-                label: 'Revenue (USD)',
-                data: [500000, 750000, 1000000],
-                borderColor: '#1e3a8a',
-                backgroundColor: 'rgba(30, 58, 138, 0.2)',
-                fill: true,
-                tension: 0.3,
-                pointRadius: 5,
-                pointBackgroundColor: '#1e3a8a',
-            }]
-            },
-            options: {
-            responsive: true,
-            plugins: { legend: { labels: { color: '#1e3a8a' } } },
-            scales: {
-                x: { ticks: { color: '#1e3a8a' }, grid: { color: '#e6f0fa' } },
-                y: { ticks: { color: '#1e3a8a' }, grid: { color: '#e6f0fa' } }
-            }
-            }
-        });
-
-        // Active Drivers Bar Chart
-        const driversCtx = document.getElementById('driversChart').getContext('2d');
-        const driversChart = new Chart(driversCtx, {
-            type: 'bar',
-            data: {
-            labels: years,
-            datasets: [{
-                label: 'Active Drivers',
-                data: [200, 300, 400],
-                backgroundColor: '#3b82f6',
-                borderColor: '#2563eb',
-                borderWidth: 1,
-                borderRadius: 4,
-            }]
-            },
-            options: {
-            responsive: true,
-            plugins: { legend: { labels: { color: '#1e3a8a' } } },
-            scales: {
-                x: { ticks: { color: '#1e3a8a' }, grid: { color: '#e6f0fa' } },
-                y: {
-                beginAtZero: true,
-                ticks: { color: '#1e3a8a' },
-                grid: { color: '#e6f0fa' }
-                }
-            }
-            }
-        });
-
-        // Total Rides Pie Chart
-        const ridesCtx = document.getElementById('ridesChart').getContext('2d');
-        const ridesChart = new Chart(ridesCtx, {
-            type: 'pie',
-            data: {
-            labels: years,
-            datasets: [{
-                label: 'Total Rides',
-                data: [10000, 15000, 20000],
-                backgroundColor: [
-                'rgba(30, 58, 138, 0.7)',
-                'rgba(59, 130, 246, 0.7)',
-                'rgba(147, 197, 253, 0.7)'
-                ],
-                borderColor: '#e6f0fa',
-                borderWidth: 2,
-            }]
-            },
-            options: {
-            responsive: true,
-            plugins: {
-                legend: { labels: { color: '#1e3a8a' } }
-            }
-            }
-        });
-
-        function openLiveChat() {
-            alert("Starting live chat..."); 
-            // Replace with your live chat widget code or integration here
-        }
-
-
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
