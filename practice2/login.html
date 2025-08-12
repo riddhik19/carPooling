@@ -5,10 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RideShare - Login</title>
     <style>
+        :root {
+            --color-primary: #4078f0;
+            --color-primary-hover: #1e40af;
+            --color-bg-main: #dbeafe;
+            --color-bg: #f3f4f6;
+            --color-card: #ffffff;
+            --color-text1: #111827;
+            --color-text2: #f3f4f6;
+            --color-text-muted: #6b7280;
+            --color-border: #e5e7eb;
+            --color-boxShadow: #00000014;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #dbeafe;
-            margin: 0;
+            background-color: var(--color-bg-main);
             padding: 0;
             display: flex;
             justify-content: center;
@@ -16,21 +27,21 @@
             height: 100vh;
         }
         .login-container {
-            background-color: white;
+            background-color: var(--color-card);
             padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px var(--color-boxShadow);
             width: 100%;
             max-width: 400px;
             text-align: center;
         }
         .login-container h1 {
             font-size: 1.8em;
-            color: #1e3a8a;
+            color: var(--color-primary);
             margin-bottom: 10px;
         }
         .login-container p {
-            color: #6b7280;
+            color: var(--color-text-muted);
             margin-bottom: 20px;
         }
         .tab-buttons {
@@ -41,17 +52,17 @@
         .tab-button {
             flex: 1;
             padding: 12px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--color-border);
             border-radius: 8px;
-            background-color: #f9fafb;
+            background-color: var(--color-bg);
             cursor: pointer;
             font-weight: 600;
-            color: #374151;
+            color: var(--color-text-muted);
         }
         .tab-button.active {
-            background-color: #1e3a8a;
-            color: white;
-            border-color: #1e3a8a;
+            background-color:var(--color-primary);
+            color: var(--color-text2);
+            border-color: var(--color-border);
         }
         .input-group {
             margin-bottom: 15px;
@@ -60,16 +71,19 @@
         .input-group label {
             display: block;
             font-size: 0.9em;
-            color: #374151;
+            color: var(--color-text-muted);
             margin-bottom: 5px;
         }
         .input-field {
             width: 100%;
             padding: 12px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--color-border);
             border-radius: 8px;
             font-size: 1em;
-            background-color: #f9fafb;
+            background-color: var(--color-bg);
+        }
+        .input-field:hover{
+            background-color: var(--color-card);
         }
         .role-selection {
             text-align: left;
@@ -77,7 +91,7 @@
         }
         .role-selection label {
             font-size: 0.9em;
-            color: #374151;
+            color: var(--color-text-muted);
             margin-right: 15px;
         }
         .role-selection input[type="radio"] {
@@ -88,18 +102,19 @@
             margin-bottom: 20px;
         }
         .forgot-password a {
-            color: #1e3a8a;
+            color: var(--color-primary);
             text-decoration: none;
             font-size: 0.9em;
         }
         .forgot-password a:hover {
+            color: var(--color-primary-hover);
             text-decoration: underline;
         }
         .login-btn {
             width: 100%;
             padding: 12px;
-            background-color: #1e3a8a;
-            color: white;
+            background-color: var(--color-primary);
+            color: var(--color-text2);
             border: none;
             border-radius: 8px;
             font-size: 1em;
@@ -108,23 +123,23 @@
             margin-bottom: 15px;
         }
         .login-btn:hover {
-            background-color: #1e40af;
+            background-color: var(--color-primary-hover);
         }
         .mobile-option {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 12px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--color-border);
             border-radius: 8px;
-            background-color: #f9fafb;
-            color: #374151;
+            background-color: var(--color-bg);
+            color: var(--color-text1);
             text-decoration: none;
             font-size: 0.9em;
             cursor: pointer;
         }
         .mobile-option:hover {
-            background-color: #e5e7eb;
+            background-color: var(--color-card);
         }
         .mobile-icon {
             margin-right: 8px;

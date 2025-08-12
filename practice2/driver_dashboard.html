@@ -5,16 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RideShare - Driver Dashboard</title>
     <style>
+        :root {
+            --color-primary: #4078f0;
+            --color-primary-hover: #1e40af;
+            --color-bg-main: #dbeafe;
+            --color-bg: #f3f4f6;
+            --color-card: #ffffff;
+            --color-text1: #111827;
+            --color-text2: #f3f4f6;
+            --color-text-muted: #6b7280;
+            --color-border: #e5e7eb;
+            --color-boxShadow: #00000014;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #dbeafe;
+            background-color: var(--color-bg-main);
             margin: 0;
             padding: 0;
-            color: #374151;
+            color: var(--color-text1);
         }
         .navbar {
-            background-color: #1e3a8a;
-            color: white;
+            background-color: var(--color-primary);
+            color: var(--color-text2);
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
@@ -32,7 +44,7 @@
             align-items: center;
         }
         .nav-links a, .nav-links button {
-            color: white;
+            color: var(--color-text2);
             text-decoration: none;
             margin-left: 20px;
             background: none;
@@ -46,8 +58,8 @@
         .nav-sos-btn {
             background-color: #ef4444;
             padding: 10px 20px;
-            color: white;
-            border: 2px solid #ffffff;
+            color: var(--color-text2);
+            border: 2px solid var(--color-border);
             border-radius: 8px;
             font-size: 1em;
             font-weight: 700;
@@ -64,22 +76,22 @@
             transform: scale(0.95);
         }
         .dashboard-container {
-            background-color: white;
+            background-color: var(--color-card);
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px var(--color-boxShadow);
             max-width: 1200px;
             margin: 20px auto;
             overflow-x: hidden;
         }
         h1 {
             font-size: 1.8em;
-            color: #1e3a8a;
+            color: var(--color-primary);
             margin-bottom: 20px;
         }
         h2 {
             font-size: 1.4em;
-            color: #1e3a8a;
+            color: var(--color-primary);
             margin-top: 30px;
             margin-bottom: 15px;
         }
@@ -93,7 +105,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background-color: #e5e7eb;
+            background-color: var(--color-bg);
         }
         .profile-details {
             flex-grow: 1;
@@ -107,7 +119,7 @@
             text-overflow: ellipsis;
         }
         .star-rating, .verification-badge {
-            color: #6b7280;
+            color: var(--color-text-muted);
             font-size: 0.9em;
         }
         .verification-badge {
@@ -121,43 +133,43 @@
             margin-bottom: 30px;
         }
         .stat-card {
-            background-color: #f9fafb;
+            background-color: var(--color-card);
             padding: 15px;
             border-radius: 8px;
             text-align: center;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--color-border);
         }
         .stat-card h3 {
             margin: 0;
             font-size: 1.2em;
-            color: #374151;
+            color: var(--color-text1);
         }
         .stat-card p {
             margin: 5px 0 0;
-            color: #6b7280;
+            color: var(--color-text-muted);
             font-size: 0.9em;
         }
         .ride-section, .earnings-section, .safety-section, .ratings-section, .growth-section {
             margin-bottom: 30px;
         }
         .ride-list, .feedback-list {
-            background-color: #f9fafb;
+            background-color: var(--color-bg);
             padding: 15px;
             border-radius: 8px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--color-border);
             overflow-x: auto;
         }
         .ride-item, .feedback-item {
             padding: 10px;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--color-border);
         }
         .ride-item:last-child, .feedback-item:last-child {
             border-bottom: none;
         }
         .action-btn {
             padding: 8px 16px;
-            background-color: #1e3a8a;
-            color: white;
+            background-color: var(--color-primary);
+            color: var(--color-text2);
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -166,13 +178,13 @@
             white-space: nowrap;
         }
         .action-btn:hover {
-            background-color: #1e40af;
+            background-color: var(--color-primary-hover);
         }
         .post-ride-btn {
             width: 100%;
             padding: 12px;
-            background-color: #1e3a8a;
-            color: white;
+            background-color: var(--color-primary);
+            color: var(--color-text2);
             border: none;
             border-radius: 8px;
             font-size: 1em;
@@ -181,7 +193,7 @@
             margin-bottom: 20px;
         }
         .post-ride-btn:hover {
-            background-color: #1e40af;
+            background-color: var(--color-primary-hover);
         }
         .metrics-grid {
             display: grid;
@@ -196,7 +208,7 @@
             color: #92400e;
         }
         .support-link {
-            color: #1e3a8a;
+            color: var(--color-primary);
             text-decoration: none;
         }
         .support-link:hover {
@@ -209,13 +221,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: var(--color-border);
             z-index: 2000;
             justify-content: center;
             align-items: center;
         }
         .sos-modal-content {
-            background-color: white;
+            background-color: var(--color-card);
             padding: 20px;
             border-radius: 16px;
             max-width: 500px;
@@ -251,8 +263,8 @@
         }
         .emergency-btn {
             padding: 10px;
-            background-color: #1e3a8a;
-            color: white;
+            background-color: var(--color-primary);
+            color: var(--color-text2);
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -260,7 +272,7 @@
             white-space: nowrap;
         }
         .emergency-btn:hover {
-            background-color: #1e40af;
+            background-color: var(--color-primary-hover);
         }
         .alert-details, .status-updates, .safety-tips {
             text-align: left;
@@ -268,12 +280,12 @@
         }
         .alert-details p, .status-updates p, .safety-tips li {
             margin: 5px 0;
-            color: #374151;
+            color: var(--color-text1);
         }
         .cancel-sos-btn {
             padding: 8px 16px;
-            background-color: #6b7280;
-            color: white;
+            background-color: var(--color-primary);
+            color: var(--color-text2);
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -281,7 +293,7 @@
             margin-top: 10px;
         }
         .cancel-sos-btn:hover {
-            background-color: #4b5563;
+            background-color: var(--color-primary-hover);
         }
         .profile-edit-modal {
             display: none;
@@ -290,13 +302,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: var(--color-bg-main);
             z-index: 2000;
             justify-content: center;
             align-items: center;
         }
         .profile-edit-modal-content {
-            background-color: white;
+            background-color: var(--color-card);
             padding: 20px;
             border-radius: 16px;
             max-width: 400px;
@@ -306,7 +318,7 @@
             max-height: 90vh;
         }
         .profile-edit-modal-content h2 {
-            color: #1e3a8a;
+            color: var(--color-primary);
             margin-bottom: 15px;
         }
         .input-group {
@@ -316,24 +328,24 @@
         .input-group label {
             display: block;
             font-size: 0.9em;
-            color: #374151;
+            color: var(--color-text-muted);
             margin-bottom: 5px;
         }
         .input-field {
             width: 100%;
             padding: 12px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--color-border);
             border-radius: 8px;
             font-size: 1em;
-            background-color: #f9fafb;
+            background-color: var(--color-bg);
             box-sizing: border-box;
             max-width: 100%;
         }
         .save-profile-btn {
             width: 100%;
             padding: 12px;
-            background-color: #1e3a8a;
-            color: white;
+            background-color: var(--color-primary);
+            color: var(--color-text2);
             border: none;
             border-radius: 8px;
             font-size: 1em;
@@ -342,7 +354,7 @@
             margin-top: 10px;
         }
         .save-profile-btn:hover {
-            background-color: #1e40af;
+            background-color: var(--color-primary-hover);
         }
         @media (max-width: 768px) {
             .dashboard-container {

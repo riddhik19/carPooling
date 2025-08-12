@@ -5,9 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RideShare - Edit Ride</title>
     <style>
+        :root {
+            --color-primary: #4078f0;
+            --color-primary-hover: #1e40af;
+            --color-bg-main: #dbeafe;
+            --color-bg: #f3f4f6;
+            --color-card: #ffffff;
+            --color-text1: #111827;
+            --color-text2: #f3f4f6;
+            --color-text-muted: #6b7280;
+            --color-border: #e5e7eb;
+            --color-boxShadow: #00000014;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #dbeafe;
+            background-color: var(--color-bg-main);
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,16 +28,16 @@
             height: 100vh;
         }
         .edit-container {
-            background-color: white;
+            background-color: var(--color-card);
             padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px var(--color-boxShadow);
             width: 100%;
             max-width: 500px;
         }
         .edit-container h1 {
             font-size: 1.8em;
-            color: #1e3a8a;
+            color: var(--color-primary);
             margin-bottom: 20px;
         }
         .input-group {
@@ -35,16 +47,16 @@
         .input-group label {
             display: block;
             font-size: 0.9em;
-            color: #374151;
+            color: var(--color-text-muted);
             margin-bottom: 5px;
         }
         .input-field {
             width: 100%;
             padding: 12px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--color-border);
             border-radius: 8px;
             font-size: 1em;
-            background-color: #f9fafb;
+            background-color: var(--color-bg);
         }
         .save-btn, .cancel-btn {
             padding: 12px;
@@ -56,18 +68,18 @@
             margin-right: 10px;
         }
         .save-btn {
-            background-color: #1e3a8a;
-            color: white;
+            background-color: var(--color-primary);
+            color: var(--color-text2);
         }
         .save-btn:hover {
-            background-color: #1e40af;
+            background-color: var(--color-primary-hover);
         }
         .cancel-btn {
-            background-color: #6b7280;
-            color: white;
+            background-color: var(--color-primary);
+            color: var(--color-text2);
         }
         .cancel-btn:hover {
-            background-color: #4b5563;
+            background-color: var(--color-primary-hover);
         }
     </style>
 </head>
