@@ -119,6 +119,28 @@
         .form-input::placeholder {
             color: #9ca3af;
         }
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+        .suggestions div {
+            padding: 10px 16px;
+            cursor: pointer;
+            color: #374151;
+        }
+        .suggestions div:hover {
+            background-color: #f9fafb;
+        }
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -450,14 +472,16 @@
                         <div class="input-group">
                             <div class="input-with-icon">
                                 <span class="input-icon">📍</span>
-                                <input type="text" class="form-input" placeholder="Pickup location" id="pickup">
+                                <input type="text" class="form-input" placeholder="Pickup location" id="pickup" oninput="showSuggestions('pickup')">
+                                <div id="pickup-suggestions" class="suggestions"></div>
                             </div>
                         </div>
                         
                         <div class="input-group">
                             <div class="input-with-icon">
                                 <span class="input-icon">📍</span>
-                                <input type="text" class="form-input" placeholder="Dropoff location" id="dropoff">
+                                <input type="text" class="form-input" placeholder="Dropoff location" id="dropoff" oninput="showSuggestions('dropoff')">
+                                <div id="dropoff-suggestions" class="suggestions"></div>
                             </div>
                         </div>
                         
@@ -597,6 +621,20 @@
     </div>
     
     <script>
+        // Static list of places for auto-suggestions
+        const places = [
+            'New York, NY',
+            'Los Angeles, CA',
+            'Chicago, IL',
+            'Houston, TX',
+            'Phoenix, AZ',
+            'Philadelphia, PA',
+            'San Antonio, TX',
+            'San Diego, CA',
+            'Dallas, TX',
+            'San Jose, CA'
+        ];
+
         function navigateToRide() {
             try {
                 const ridesSection = document.getElementById('rides-section');
@@ -625,21 +663,12 @@
         
         function bookRide() {
             try {
-                const loggedIn = localStorage.getItem('loggedIn') === 'true';
-                if (!loggedIn) {
-                    const pickup = document.getElementById('pickup').value;
-                    const dropoff = document.getElementById('dropoff').value;
-                    const date = document.getElementById('date-text').textContent;
-                    const time = document.getElementById('time-text').textContent;
-                    localStorage.setItem('bookingDetails', JSON.stringify({ pickup, dropoff, date, time }));
-                    window.location.href = 'login.html?tab=login&action=ride';
-                } else {
-                    const pickup = document.getElementById('pickup').value;
-                    const dropoff = document.getElementById('dropoff').value;
-                    const date = document.getElementById('date-text').textContent;
-                    const time = document.getElementById('time-text').textContent;
-                    alert(`Booking ride for ${localStorage.getItem('userRole') || 'user'} from ${pickup || 'unspecified pickup'} to ${dropoff || 'unspecified dropoff'} on ${date} at ${time}`);
-                }
+                const pickup = document.getElementById('pickup').value;
+                const dropoff = document.getElementById('dropoff').value;
+                const date = document.getElementById('date-text').textContent;
+                const time = document.getElementById('time-text').textContent;
+                localStorage.setItem('bookingDetails', JSON.stringify({ pickup, dropoff, date, time }));
+                window.location.href = 'login.html?tab=login&action=ride';
             } catch (e) {
                 alert('Error processing booking: ' + e.message);
                 window.location.href = 'login.html?tab=login&action=ride';
@@ -718,6 +747,33 @@
             }
         }
         
+        function showSuggestions(fieldId) {
+            const input = document.getElementById(fieldId);
+            const suggestionsDiv = document.getElementById(`${fieldId}-suggestions`);
+            const query = input.value.toLowerCase().trim();
+            
+            // Clear previous suggestions
+            suggestionsDiv.innerHTML = '';
+            suggestionsDiv.style.display = 'none';
+            
+            if (query) {
+                const filteredPlaces = places.filter(place => place.toLowerCase().includes(query));
+                if (filteredPlaces.length > 0) {
+                    filteredPlaces.forEach(place => {
+                        const suggestion = document.createElement('div');
+                        suggestion.textContent = place;
+                        suggestion.onclick = () => {
+                            input.value = place;
+                            suggestionsDiv.innerHTML = '';
+                            suggestionsDiv.style.display = 'none';
+                        };
+                        suggestionsDiv.appendChild(suggestion);
+                    });
+                    suggestionsDiv.style.display = 'block';
+                }
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             initializeDateTime();
             
@@ -754,6 +810,18 @@
             timeInput.addEventListener('change', updateTimeDisplay);
             dateInput.addEventListener('input', updateDateDisplay);
             timeInput.addEventListener('input', updateTimeDisplay);
+            
+            // Close suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                const pickupSuggestions = document.getElementById('pickup-suggestions');
+                const dropoffSuggestions = document.getElementById('dropoff-suggestions');
+                if (!e.target.closest('#pickup') && !e.target.closest('#pickup-suggestions')) {
+                    pickupSuggestions.style.display = 'none';
+                }
+                if (!e.target.closest('#dropoff') && !e.target.closest('#dropoff-suggestions')) {
+                    dropoffSuggestions.style.display = 'none';
+                }
+            });
             
             const urlParams = new URLSearchParams(window.location.search);
             const action = urlParams.get('action');

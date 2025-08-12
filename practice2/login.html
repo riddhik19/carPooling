@@ -168,6 +168,10 @@
         </div>
         <div id="signup-section" class="section" style="display: none;">
             <div class="input-group">
+                <label for="signup-name">Name</label>
+                <input type="text" id="signup-name" class="input-field" placeholder="Enter your name" required>
+            </div>
+            <div class="input-group">
                 <label for="signup-email">Email</label>
                 <input type="email" id="signup-email" class="input-field" placeholder="Enter your email" required>
             </div>
@@ -223,13 +227,25 @@
                 if (email && password) {
                     localStorage.setItem('loggedIn', 'true');
                     localStorage.setItem('userRole', role);
-                    // Derive name from email
-                    const userName = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
-                    localStorage.setItem(role === 'driver' ? 'driverName' : 'passengerName', userName);
+                    // Derive name from email if not already set
+                    let userName = localStorage.getItem(role === 'driver' ? 'driverName' : 'passengerName');
+                    if (!userName) {
+                        userName = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+                        localStorage.setItem(role === 'driver' ? 'driverName' : 'passengerName', userName);
+                    }
                     alert(`Logged in as ${role} with email: ${email}`);
                     // Clear input fields
                     document.getElementById('login-email').value = '';
                     document.getElementById('login-password').value = '';
+                    // Check for booking action
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const action = urlParams.get('action');
+                    if (action === 'ride') {
+                        const bookingDetails = JSON.parse(localStorage.getItem('bookingDetails') || '{}');
+                        if (bookingDetails.pickup && bookingDetails.dropoff) {
+                            alert(`Booking ride for ${userName} from ${bookingDetails.pickup} to ${bookingDetails.dropoff} on ${bookingDetails.date} at ${bookingDetails.time}`);
+                        }
+                    }
                     // Redirect based on role
                     if (role === 'driver') {
                         window.location.href = 'driver_dashboard.html';
@@ -245,20 +261,29 @@
         }
 
         function handleSignup() {
+            const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             const role = document.querySelector('input[name="signup-role"]:checked').value;
             try {
-                if (email && password) {
+                if (name && email && password) {
                     localStorage.setItem('loggedIn', 'true');
                     localStorage.setItem('userRole', role);
-                    // Derive name from email
-                    const userName = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
-                    localStorage.setItem(role === 'driver' ? 'driverName' : 'passengerName', userName);
-                    alert(`Signed up as ${role} with email: ${email}`);
+                    localStorage.setItem(role === 'driver' ? 'driverName' : 'passengerName', name);
+                    alert(`Signed up as ${role} with name: ${name}, email: ${email}`);
                     // Clear input fields
+                    document.getElementById('signup-name').value = '';
                     document.getElementById('signup-email').value = '';
                     document.getElementById('signup-password').value = '';
+                    // Check for booking action
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const action = urlParams.get('action');
+                    if (action === 'ride') {
+                        const bookingDetails = JSON.parse(localStorage.getItem('bookingDetails') || '{}');
+                        if (bookingDetails.pickup && bookingDetails.dropoff) {
+                            alert(`Booking ride for ${name} from ${bookingDetails.pickup} to ${bookingDetails.dropoff} on ${bookingDetails.date} at ${bookingDetails.time}`);
+                        }
+                    }
                     // Redirect based on role
                     if (role === 'driver') {
                         window.location.href = 'driver_dashboard.html';
