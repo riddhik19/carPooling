@@ -50,12 +50,56 @@
             color: #1e3a8a;
             margin-bottom: 15px;
         }
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            flex: 1 1 45%;
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.9em;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: #f9fafb;
+            box-sizing: border-box;
+        }
+        .search-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .search-btn:hover {
+            background-color: #1e40af;
+        }
         .search-params {
             margin-bottom: 20px;
+            background-color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
         }
         .search-params p {
             margin: 5px 0;
-            color: #6b7280;
+            color: #374151;
         }
         .ride-list {
             background-color: #f9fafb;
@@ -102,6 +146,12 @@
             .search-container {
                 padding: 20px;
             }
+            .search-form {
+                flex-direction: column;
+            }
+            .input-group {
+                flex: 1 1 100%;
+            }
         }
     </style>
 </head>
@@ -115,32 +165,246 @@
         </div>
     </nav>
     <div class="search-container">
-        <h1>Search Results</h1>
+        <h1>Search Rides</h1>
+        <div class="search-form">
+            <div class="input-group">
+                <label for="pickup-location">Pickup Location</label>
+                <input type="text" id="pickup-location" class="input-field" list="indian-cities" placeholder="Enter pickup location" required>
+                <datalist id="indian-cities">
+                    <option value="Mumbai">
+                    <option value="Delhi">
+                    <option value="Bangalore">
+                    <option value="Hyderabad">
+                    <option value="Ahmedabad">
+                    <option value="Chennai">
+                    <option value="Kolkata">
+                    <option value="Pune">
+                    <option value="Jaipur">
+                    <option value="Surat">
+                    <option value="Lucknow">
+                    <option value="Kanpur">
+                    <option value="Nagpur">
+                    <option value="Indore">
+                    <option value="Thane">
+                    <option value="Bhopal">
+                    <option value="Visakhapatnam">
+                    <option value="Patna">
+                    <option value="Vadodara">
+                    <option value="Ghaziabad">
+                    <option value="Ludhiana">
+                    <option value="Agra">
+                    <option value="Nashik">
+                    <option value="Faridabad">
+                    <option value="Meerut">
+                    <option value="Rajkot">
+                    <option value="Varanasi">
+                    <option value="Srinagar">
+                    <option value="Aurangabad">
+                    <option value="Dhanbad">
+                    <option value="Amritsar">
+                    <option value="Allahabad">
+                    <option value="Ranchi">
+                    <option value="Howrah">
+                    <option value="Coimbatore">
+                    <option value="Jabalpur">
+                    <option value="Gwalior">
+                    <option value="Vijayawada">
+                    <option value="Jodhpur">
+                    <option value="Madurai">
+                    <option value="Raipur">
+                    <option value="Kota">
+                    <option value="Chandigarh">
+                    <option value="Guwahati">
+                    <option value="Solapur">
+                    <option value="Tiruchirappalli">
+                    <option value="Bareilly">
+                    <option value="Mysore">
+                    <option value="Tiruppur">
+                    <option value="Gurgaon">
+                    <option value="Aligarh">
+                    <option value="Jalandhar">
+                    <option value="Bhubaneswar">
+                    <option value="Salem">
+                    <option value="Warangal">
+                    <option value="Guntur">
+                    <option value="Bhiwandi">
+                    <option value="Saharanpur">
+                    <option value="Gorakhpur">
+                    <option value="Bikaner">
+                    <option value="Amravati">
+                    <option value="Noida">
+                    <option value="Jamshedpur">
+                    <option value="Bhilai">
+                    <option value="Cuttack">
+                    <option value="Firozabad">
+                    <option value="Kochi">
+                    <option value="Nellore">
+                    <option value="Bhavnagar">
+                    <option value="Dehradun">
+                    <option value="Durgapur">
+                    <option value="Asansol">
+                    <option value="Rourkela">
+                    <option value="Nanded">
+                    <option value="Kolhapur">
+                    <option value="Ajmer">
+                    <option value="Akola">
+                    <option value="Gulbarga">
+                    <option value="Jamnagar">
+                    <option value="Ujjain">
+                    <option value="Loni">
+                    <option value="Siliguri">
+                    <option value="Jhansi">
+                    <option value="Ulhasnagar">
+                    <option value="Jammu">
+                    <option value="Sangli">
+                    <option value="Mangalore">
+                    <option value="Erode">
+                    <option value="Belgaum">
+                    <option value="Ambattur">
+                    <option value="Tirunelveli">
+                    <option value="Malegaon">
+                    <option value="Gaya">
+                    <option value="Jalgaon">
+                    <option value="Udaipur">
+                    <option value="Maheshtala">
+                </datalist>
+            </div>
+            <div class="input-group">
+                <label for="dropoff-location">Drop-off Location</label>
+                <input type="text" id="dropoff-location" class="input-field" list="indian-cities-dropoff" placeholder="Enter drop-off location" required>
+                <datalist id="indian-cities-dropoff">
+                    <option value="Mumbai">
+                    <option value="Delhi">
+                    <option value="Bangalore">
+                    <option value="Hyderabad">
+                    <option value="Ahmedabad">
+                    <option value="Chennai">
+                    <option value="Kolkata">
+                    <option value="Pune">
+                    <option value="Jaipur">
+                    <option value="Surat">
+                    <option value="Lucknow">
+                    <option value="Kanpur">
+                    <option value="Nagpur">
+                    <option value="Indore">
+                    <option value="Thane">
+                    <option value="Bhopal">
+                    <option value="Visakhapatnam">
+                    <option value="Patna">
+                    <option value="Vadodara">
+                    <option value="Ghaziabad">
+                    <option value="Ludhiana">
+                    <option value="Agra">
+                    <option value="Nashik">
+                    <option value="Faridabad">
+                    <option value="Meerut">
+                    <option value="Rajkot">
+                    <option value="Varanasi">
+                    <option value="Srinagar">
+                    <option value="Aurangabad">
+                    <option value="Dhanbad">
+                    <option value="Amritsar">
+                    <option value="Allahabad">
+                    <option value="Ranchi">
+                    <option value="Howrah">
+                    <option value="Coimbatore">
+                    <option value="Jabalpur">
+                    <option value="Gwalior">
+                    <option value="Vijayawada">
+                    <option value="Jodhpur">
+                    <option value="Madurai">
+                    <option value="Raipur">
+                    <option value="Kota">
+                    <option value="Chandigarh">
+                    <option value="Guwahati">
+                    <option value="Solapur">
+                    <option value="Tiruchirappalli">
+                    <option value="Bareilly">
+                    <option value="Mysore">
+                    <option value="Tiruppur">
+                    <option value="Gurgaon">
+                    <option value="Aligarh">
+                    <option value="Jalandhar">
+                    <option value="Bhubaneswar">
+                    <option value="Salem">
+                    <option value="Warangal">
+                    <option value="Guntur">
+                    <option value="Bhiwandi">
+                    <option value="Saharanpur">
+                    <option value="Gorakhpur">
+                    <option value="Bikaner">
+                    <option value="Amravati">
+                    <option value="Noida">
+                    <option value="Jamshedpur">
+                    <option value="Bhilai">
+                    <option value="Cuttack">
+                    <option value="Firozabad">
+                    <option value="Kochi">
+                    <option value="Nellore">
+                    <option value="Bhavnagar">
+                    <option value="Dehradun">
+                    <option value="Durgapur">
+                    <option value="Asansol">
+                    <option value="Rourkela">
+                    <option value="Nanded">
+                    <option value="Kolhapur">
+                    <option value="Ajmer">
+                    <option value="Akola">
+                    <option value="Gulbarga">
+                    <option value="Jamnagar">
+                    <option value="Ujjain">
+                    <option value="Loni">
+                    <option value="Siliguri">
+                    <option value="Jhansi">
+                    <option value="Ulhasnagar">
+                    <option value="Jammu">
+                    <option value="Sangli">
+                    <option value="Mangalore">
+                    <option value="Erode">
+                    <option value="Belgaum">
+                    <option value="Ambattur">
+                    <option value="Tirunelveli">
+                    <option value="Malegaon">
+                    <option value="Gaya">
+                    <option value="Jalgaon">
+                    <option value="Udaipur">
+                    <option value="Maheshtala">
+                </datalist>
+            </div>
+            <div class="input-group">
+                <label for="ride-time">Date & Time of Departure</label>
+                <input type="datetime-local" id="ride-time" class="input-field" required>
+            </div>
+            <div class="input-group">
+                <label for="max-price">Max Price ($)</label>
+                <input type="number" id="max-price" class="input-field" min="0" step="0.01" placeholder="Enter max price">
+            </div>
+            <div class="input-group">
+                <label for="seats">Seats Required</label>
+                <input type="number" id="seats" class="input-field" min="1" placeholder="Enter number of seats">
+            </div>
+            <div class="input-group">
+                <label>Preferences</label>
+                <div>
+                    <label><input type="checkbox" id="pets"> Pets Allowed</label>
+                    <label><input type="checkbox" id="ac"> AC</label>
+                    <label><input type="checkbox" id="luggage"> Extra Luggage</label>
+                </div>
+            </div>
+        </div>
+        <button class="search-btn" onclick="searchRides()">Search Rides</button>
         <div class="search-params">
             <h2>Search Parameters</h2>
-            <p><strong>Pickup:</strong> <span id="pickup"></span></p>
-            <p><strong>Drop-off:</strong> <span id="dropoff"></span></p>
-            <p><strong>Time:</strong> <span id="ride-time"></span></p>
-            <p><strong>Max Price:</strong> $<span id="max-price"></span></p>
-            <p><strong>Seats Required:</strong> <span id="seats"></span></p>
-            <p><strong>Preferences:</strong> <span id="preferences"></span></p>
+            <p><strong>Pickup:</strong> <span id="search-pickup">--</span></p>
+            <p><strong>Drop-off:</strong> <span id="search-dropoff">--</span></p>
+            <p><strong>Time:</strong> <span id="search-ride-time">--</span></p>
+            <p><strong>Max Price:</strong> $<span id="search-max-price">--</span></p>
+            <p><strong>Seats Required:</strong> <span id="search-seats">--</span></p>
+            <p><strong>Preferences:</strong> <span id="search-preferences">--</span></p>
         </div>
         <h2>Available Rides</h2>
-        <div class="ride-list">
-            <div class="ride-item">
-                <p><strong>Driver:</strong> John Smith</p>
-                <p><strong>Vehicle:</strong> Toyota Camry (4 seats)</p>
-                <p><strong>Rating:</strong> ★★★★☆ 4.8</p>
-                <p><strong>Fare:</strong> $15.00</p>
-                <button class="action-btn" onclick="bookRide('ride1')">Book Now</button>
-            </div>
-            <div class="ride-item">
-                <p><strong>Driver:</strong> Sarah Johnson</p>
-                <p><strong>Vehicle:</strong> Honda SUV (6 seats)</p>
-                <p><strong>Rating:</strong> ★★★★★ 4.9</p>
-                <p><strong>Fare:</strong> $20.00</p>
-                <button class="action-btn" onclick="bookRide('ride2')">Book Now</button>
-            </div>
+        <div class="ride-list" id="available-rides">
+            <!-- Dynamically populated rides -->
         </div>
         <button class="back-btn" onclick="window.location.href='passenger_dashboard.html'">Back to Dashboard</button>
     </div>
@@ -148,35 +412,146 @@
     <script>
         // Check if user is logged in as passenger
         document.addEventListener('DOMContentLoaded', function() {
-            const loggedIn = localStorage.getItem('loggedIn');
-            const userRole = localStorage.getItem('userRole');
-            if (loggedIn !== 'true' || userRole !== 'passenger') {
-                window.location.href = 'login.html';
-            } else {
-                // Load search parameters
+            try {
+                const loggedIn = localStorage.getItem('loggedIn');
+                const userRole = localStorage.getItem('userRole');
+                if (loggedIn !== 'true' || userRole !== 'passenger') {
+                    alert('Please log in as a passenger to search rides.');
+                    window.location.href = 'login.html?tab=login';
+                }
+                // Load previous search parameters if available
+                loadSearchParams();
+                // Load available rides
+                loadAvailableRides();
+            } catch (e) {
+                alert('Error accessing localStorage: ' + e.message);
+                window.location.href = 'login.html?tab=login';
+            }
+        });
+
+        function loadSearchParams() {
+            try {
                 const params = JSON.parse(localStorage.getItem('searchParams') || '{}');
-                document.getElementById('pickup').textContent = params.pickup || 'Not specified';
-                document.getElementById('dropoff').textContent = params.dropoff || 'Not specified';
-                document.getElementById('ride-time').textContent = params.rideTime || 'Not specified';
-                document.getElementById('max-price').textContent = params.maxPrice || 'Any';
-                document.getElementById('seats').textContent = params.seats || 'Any';
+                document.getElementById('search-pickup').textContent = params.pickup || '--';
+                document.getElementById('search-dropoff').textContent = params.dropoff || '--';
+                document.getElementById('search-ride-time').textContent = params.rideTime ? new Date(params.rideTime).toLocaleString() : '--';
+                document.getElementById('search-max-price').textContent = params.maxPrice || '--';
+                document.getElementById('search-seats').textContent = params.seats || '--';
                 const preferences = [];
                 if (params.pets) preferences.push('Pets Allowed');
                 if (params.ac) preferences.push('AC');
                 if (params.luggage) preferences.push('Extra Luggage');
-                document.getElementById('preferences').textContent = preferences.length ? preferences.join(', ') : 'None';
+                document.getElementById('search-preferences').textContent = preferences.length ? preferences.join(', ') : '--';
+            } catch (e) {
+                alert('Error loading search parameters: ' + e.message);
             }
-        });
-
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'login.html';
         }
 
-        function bookRide(rideId) {
-            alert(`Booked ride ${rideId}. Functionality not fully implemented.`);
-            // Optionally redirect back to passenger dashboard after booking
-            window.location.href = 'passenger_dashboard.html';
+        function searchRides() {
+            try {
+                const pickup = document.getElementById('pickup-location').value;
+                const dropoff = document.getElementById('dropoff-location').value;
+                const rideTime = document.getElementById('ride-time').value;
+                const maxPrice = document.getElementById('max-price').value;
+                const seats = document.getElementById('seats').value;
+                const pets = document.getElementById('pets').checked;
+                const ac = document.getElementById('ac').checked;
+                const luggage = document.getElementById('luggage').checked;
+
+                if (!pickup || !dropoff || !rideTime) {
+                    alert('Please fill in all required fields (Pickup, Drop-off, and Time).');
+                    return;
+                }
+
+                const params = {
+                    pickup,
+                    dropoff,
+                    rideTime,
+                    maxPrice,
+                    seats,
+                    pets,
+                    ac,
+                    luggage
+                };
+
+                localStorage.setItem('searchParams', JSON.stringify(params));
+                loadSearchParams();
+                loadAvailableRides();
+            } catch (e) {
+                alert('Error processing search: ' + e.message);
+            }
+        }
+
+        function loadAvailableRides() {
+            try {
+                const params = JSON.parse(localStorage.getItem('searchParams') || '{}');
+                const rides = JSON.parse(localStorage.getItem('postedRides') || '[]');
+                const rideList = document.getElementById('available-rides');
+                rideList.innerHTML = ''; // Clear existing rides
+
+                if (rides.length === 0) {
+                    rideList.innerHTML = '<p>No rides available.</p>';
+                    return;
+                }
+
+                const filteredRides = rides.filter(ride => {
+                    const matchesPickup = !params.pickup || ride.pickup.toLowerCase().includes(params.pickup.toLowerCase());
+                    const matchesDropoff = !params.dropoff || ride.dropoff.toLowerCase().includes(params.dropoff.toLowerCase());
+                    const matchesPrice = !params.maxPrice || parseFloat(ride.fare) <= parseFloat(params.maxPrice);
+                    const matchesSeats = !params.seats || parseInt(ride.seats) >= parseInt(params.seats);
+                    const matchesPets = !params.pets || ride.pets === 'yes';
+                    const matchesLuggage = !params.luggage || ride.luggage === 'yes';
+                    return matchesPickup && matchesDropoff && matchesPrice && matchesSeats && matchesPets && matchesLuggage;
+                });
+
+                if (filteredRides.length === 0) {
+                    rideList.innerHTML = '<p>No rides match your search criteria.</p>';
+                    return;
+                }
+
+                filteredRides.forEach((ride, index) => {
+                    const rideItem = document.createElement('div');
+                    rideItem.className = 'ride-item';
+                    rideItem.innerHTML = `
+                        <p><strong>Driver:</strong> John Doe</p>
+                        <p><strong>Vehicle:</strong> ${ride.vehicle || 'Toyota Camry (4 seats)'}</p>
+                        <p><strong>Pickup:</strong> ${ride.pickup}</p>
+                        <p><strong>Drop-off:</strong> ${ride.dropoff}</p>
+                        <p><strong>Time:</strong> ${ride.departure ? new Date(ride.departure).toLocaleString() : '--'}</p>
+                        <p><strong>Fare:</strong> $${ride.fare}</p>
+                        <p><strong>Seats Available:</strong> ${ride.seats}</p>
+                        <p><strong>Preferences:</strong> ${ride.pets === 'yes' ? 'Pets Allowed, ' : ''}${ride.luggage === 'yes' ? 'Extra Luggage, ' : ''}${ride.smoking === 'yes' ? 'Smoking Allowed' : 'No Smoking'}</p>
+                        <button class="action-btn" onclick="bookRide(${index})">Book Now</button>
+                    `;
+                    rideList.appendChild(rideItem);
+                });
+            } catch (e) {
+                alert('Error loading rides: ' + e.message);
+            }
+        }
+
+        function bookRide(index) {
+            try {
+                const rides = JSON.parse(localStorage.getItem('postedRides') || '[]');
+                const ride = rides[index];
+                const bookedRides = JSON.parse(localStorage.getItem('bookedRides') || '[]');
+                bookedRides.push({ ...ride, status: 'booked' });
+                localStorage.setItem('bookedRides', JSON.stringify(bookedRides));
+                alert('Ride booked successfully!');
+                window.location.href = 'passenger_dashboard.html';
+            } catch (e) {
+                alert('Error booking ride: ' + e.message);
+            }
+        }
+
+        function logout() {
+            try {
+                localStorage.clear();
+                window.location.href = 'login.html?tab=login';
+            } catch (e) {
+                alert('Error clearing localStorage: ' + e.message);
+                window.location.href = 'login.html?tab=login';
+            }
         }
     </script>
 </body>

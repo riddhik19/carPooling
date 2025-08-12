@@ -225,17 +225,17 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 40px;
         }
-        .about-section {
+        .about-section, .stats-section {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             gap: 40px;
         }
-        .about-text {
+        .about-text, .stats-text {
             flex: 1;
             max-width: 50%;
         }
-        .about-text h2 {
+        .about-text h2, .stats-text h2 {
             font-size: 2em;
             color: #1e3a8a;
             margin-bottom: 20px;
@@ -245,7 +245,7 @@
             color: #374151;
             margin-bottom: 16px;
         }
-        .about-image {
+        .about-image, .stats-image {
             flex: 1;
             max-width: 50%;
             height: 300px;
@@ -258,16 +258,11 @@
             color: #6b7280;
             font-size: 14px;
         }
-        .about-image img {
+        .about-image img, .stats-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Changed to contain to prevent overflow */
             border-radius: 10px;
-        }
-        .stats-section h2 {
-            font-size: 2em;
-            color: #1e3a8a;
-            margin-bottom: 20px;
         }
         .stats-table {
             width: 100%;
@@ -317,6 +312,7 @@
             width: 100%;
             text-align: center;
             flex-shrink: 0;
+            cursor: pointer;
         }
         .support-card h3 {
             font-size: 1.5em;
@@ -392,6 +388,158 @@
             background-color: #1e40af;
             transform: translateY(-1px);
         }
+        /* Chat Modal Styles */
+        .chat-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .chat-container {
+            background-color: white;
+            border-radius: 16px;
+            width: 400px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .chat-header {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header .close-chat {
+            cursor: pointer;
+            font-size: 1.5em;
+        }
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9fafb;
+        }
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 12px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .chat-message.user {
+            background-color: #1e3a8a;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 2px;
+        }
+        .chat-message.support {
+            background-color: #e5e7eb;
+            color: #374151;
+            margin-right: auto;
+            border-bottom-left-radius: 2px;
+        }
+        .chat-footer {
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .chat-input:focus {
+            outline: none;
+            border-color: #1e3a8a;
+        }
+        .chat-send-btn {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .chat-send-btn:hover {
+            background-color: #1e40af;
+        }
+        /* Phone Support Modal Styles */
+        .phone-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .phone-container {
+            background-color: white;
+            border-radius: 16px;
+            width: 350px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .phone-header {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .phone-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .phone-option-btn {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .phone-option-btn:hover {
+            background-color: #1e40af;
+        }
+        .phone-close-btn {
+            background-color: #e5e7eb;
+            color: #374151;
+            padding: 10px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .phone-close-btn:hover {
+            background-color: #d1d5db;
+        }
         @media (max-width: 768px) {
             .main-container {
                 padding: 10px;
@@ -420,11 +568,11 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
-            .about-section {
+            .about-section, .stats-section {
                 flex-direction: column;
                 gap: 20px;
             }
-            .about-text, .about-image {
+            .about-text, .stats-text, .about-image, .stats-image {
                 max-width: 100%;
             }
             .section, .rides-section {
@@ -446,6 +594,9 @@
                 max-width: 100%;
                 margin: 0;
                 padding: 24px;
+            }
+            .chat-container, .phone-container {
+                width: 90%;
             }
         }
     </style>
@@ -565,52 +716,86 @@
         </div>
         
         <div id="business" class="section stats-section">
-            <h2>Business Stats</h2>
-            <table class="stats-table">
-                <tr>
-                    <th>Year</th>
-                    <th>Total Rides</th>
-                    <th>Revenue (USD)</th>
-                    <th>Active Drivers</th>
-                </tr>
-                <tr>
-                    <td>2023</td>
-                    <td>10,000</td>
-                    <td>500,000</td>
-                    <td>200</td>
-                </tr>
-                <tr>
-                    <td>2024</td>
-                    <td>15,000</td>
-                    <td>750,000</td>
-                    <td>300</td>
-                </tr>
-                <tr>
-                    <td>2025</td>
-                    <td>20,000</td>
-                    <td>1,000,000</td>
-                    <td>400</td>
-                </tr>
-            </table>
+            <div class="stats-text">
+                <h2>Business Stats</h2>
+                <table class="stats-table">
+                    <tr>
+                        <th>Year</th>
+                        <th>Total Rides</th>
+                        <th>Revenue (USD)</th>
+                        <th>Active Drivers</th>
+                    </tr>
+                    <tr>
+                        <td>2023</td>
+                        <td>10,000</td>
+                        <td>500,000</td>
+                        <td>200</td>
+                    </tr>
+                    <tr>
+                        <td>2024</td>
+                        <td>15,000</td>
+                        <td>750,000</td>
+                        <td>300</td>
+                    </tr>
+                    <tr>
+                        <td>2025</td>
+                        <td>20,000</td>
+                        <td>1,000,000</td>
+                        <td>400</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="stats-image">
+                <img src="business_stats_pie_bar.png" alt="Business Growth Illustration">
+            </div>
         </div>
         
         <div class="support-section">
             <h2 class="support-title">Support Chat</h2>
             <div class="support-content">
-                <div class="support-card">
+                <div class="support-card" onclick="openChatModal()">
                     <h3>Live Chat</h3>
                     <p>Chat with our support team in real-time</p>
                     <span class="status">Active</span>
                 </div>
-                <div class="support-card">
+                <div class="support-card" onclick="openPhoneModal()">
                     <h3>Phone Support</h3>
-                    <p>Call us at +91 1800-123-456</p>
+                    <p>Message us on your preferred app</p>
                     <span class="status">24/7</span>
                 </div>
-                <div class="support-card">
+                <div class="support-card" onclick="openEmailSupport()">
                     <h3>Email Support</h3>
-                    <p><a href="mailto:support@journeysync.com" class="email">support@journeysync.com</a></p>
+                    <p>Contact us via email</p>
                     <span class="status">24-48 hrs</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Modal -->
+        <div class="chat-modal" id="chat-modal">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <span>Live Support Chat</span>
+                    <span class="close-chat" onclick="closeChatModal()">×</span>
+                </div>
+                <div class="chat-body" id="chat-body">
+                    <div class="chat-message support">Welcome to RideShare Support! How can we assist you today?</div>
+                </div>
+                <div class="chat-footer">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="Type your message...">
+                    <button class="chat-send-btn" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phone Support Modal -->
+        <div class="phone-modal" id="phone-modal">
+            <div class="phone-container">
+                <div class="phone-header">Choose a Messaging App</div>
+                <div class="phone-options">
+                    <button class="phone-option-btn" onclick="openWhatsApp()">WhatsApp</button>
+                    <button class="phone-option-btn" onclick="openTelegram()">Telegram</button>
+                    <button class="phone-close-btn" onclick="closePhoneModal()">Close</button>
                 </div>
             </div>
         </div>
@@ -634,6 +819,145 @@
             'Dallas, TX',
             'San Jose, CA'
         ];
+
+        // WebSocket connection for live chat
+        let socket;
+        function initializeWebSocket() {
+            try {
+                socket = new WebSocket('ws://localhost:8080'); // Replace with your WebSocket server URL
+                socket.onopen = () => {
+                    console.log('Connected to support chat server');
+                };
+                socket.onmessage = (event) => {
+                    const message = JSON.parse(event.data);
+                    addMessageToChat(message.text, 'support');
+                };
+                socket.onclose = () => {
+                    addMessageToChat('Connection to support closed. Please try again later.', 'support');
+                };
+                socket.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    addMessageToChat('Error connecting to support. Please try again.', 'support');
+                };
+            } catch (e) {
+                console.error('WebSocket initialization error:', e);
+                addMessageToChat('Unable to connect to support. Please try again later.', 'support');
+            }
+        }
+
+        function openChatModal() {
+            try {
+                const chatModal = document.getElementById('chat-modal');
+                chatModal.style.display = 'flex';
+                initializeWebSocket();
+                scrollChatToBottom();
+            } catch (e) {
+                console.error('Error opening chat modal:', e);
+            }
+        }
+
+        function closeChatModal() {
+            try {
+                const chatModal = document.getElementById('chat-modal');
+                chatModal.style.display = 'none';
+                if (socket) {
+                    socket.close();
+                }
+            } catch (e) {
+                console.error('Error closing chat modal:', e);
+            }
+        }
+
+        function sendMessage() {
+            try {
+                const chatInput = document.getElementById('chat-input');
+                const message = chatInput.value.trim();
+                if (message && socket && socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({ text: message, sender: 'user' }));
+                    addMessageToChat(message, 'user');
+                    chatInput.value = '';
+                    scrollChatToBottom();
+                } else if (!message) {
+                    alert('Please enter a message.');
+                } else {
+                    alert('Chat server is not connected. Please try again.');
+                }
+            } catch (e) {
+                console.error('Error sending message:', e);
+                alert('Error sending message. Please try again.');
+            }
+        }
+
+        function addMessageToChat(text, sender) {
+            try {
+                const chatBody = document.getElementById('chat-body');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${sender}`;
+                messageDiv.textContent = text;
+                chatBody.appendChild(messageDiv);
+                scrollChatToBottom();
+            } catch (e) {
+                console.error('Error adding message to chat:', e);
+            }
+        }
+
+        function scrollChatToBottom() {
+            const chatBody = document.getElementById('chat-body');
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Phone Support Modal Functions
+        function openPhoneModal() {
+            try {
+                const phoneModal = document.getElementById('phone-modal');
+                phoneModal.style.display = 'flex';
+            } catch (e) {
+                console.error('Error opening phone modal:', e);
+            }
+        }
+
+        function closePhoneModal() {
+            try {
+                const phoneModal = document.getElementById('phone-modal');
+                phoneModal.style.display = 'none';
+            } catch (e) {
+                console.error('Error closing phone modal:', e);
+            }
+        }
+
+        function openWhatsApp() {
+            try {
+                const phoneNumber = '+911800123456'; // Phone number without spaces
+                window.open(`https://wa.me/${phoneNumber}`, '_blank');
+                closePhoneModal();
+            } catch (e) {
+                console.error('Error opening WhatsApp:', e);
+                alert('Error opening WhatsApp. Please try again.');
+            }
+        }
+
+        function openTelegram() {
+            try {
+                const telegramUsername = '@RideShareSupport'; // Placeholder Telegram username
+                window.open(`https://t.me/${telegramUsername}`, '_blank');
+                closePhoneModal();
+            } catch (e) {
+                console.error('Error opening Telegram:', e);
+                alert('Error opening Telegram. Please try again.');
+            }
+        }
+
+        // Email Support Function
+        function openEmailSupport() {
+            try {
+                const userEmail = localStorage.getItem('userEmail') || ''; // Retrieve user email if logged in
+                const subject = encodeURIComponent('RideShare Support Request');
+                window.location.href = `mailto:support@journeysync.com?subject=${subject}&from=${userEmail}`;
+            } catch (e) {
+                console.error('Error opening email client:', e);
+                alert('Error opening email client. Please try again.');
+            }
+        }
 
         function navigateToRide() {
             try {
@@ -811,7 +1135,7 @@
             dateInput.addEventListener('input', updateDateDisplay);
             timeInput.addEventListener('input', updateTimeDisplay);
             
-            // Close suggestions when clicking outside
+            // Close suggestions and modals when clicking outside
             document.addEventListener('click', function(e) {
                 const pickupSuggestions = document.getElementById('pickup-suggestions');
                 const dropoffSuggestions = document.getElementById('dropoff-suggestions');
@@ -820,6 +1144,16 @@
                 }
                 if (!e.target.closest('#dropoff') && !e.target.closest('#dropoff-suggestions')) {
                     dropoffSuggestions.style.display = 'none';
+                }
+                if (!e.target.closest('.phone-container') && !e.target.closest('.support-card')) {
+                    closePhoneModal();
+                }
+            });
+            
+            // Allow sending chat message with Enter key
+            document.getElementById('chat-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
                 }
             });
             
