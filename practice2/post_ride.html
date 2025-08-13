@@ -111,7 +111,7 @@
         .current-location-btn:hover {
             background-color: var(--color-primary-hover);
         }
-        .ride-preferences, .safety-verification {
+        .safety-verification {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
@@ -421,37 +421,6 @@
                 </select>
             </div>
         </div>
-        <!-- Ride Preferences -->
-        <div class="ride-preferences-section">
-            <h2>Ride Preferences</h2>
-            <div class="ride-preferences">
-                <div class="preference-item">
-                    <label>Luggage Allowed</label>
-                    <select id="luggage-allowed" class="input-field">
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
-                <div class="preference-item">
-                    <label>Pets Allowed</label>
-                    <select id="pets-allowed" class="input-field">
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
-                <div class="preference-item">
-                    <label>Music Preference</label>
-                    <input type="text" id="music-preference" class="input-field" placeholder="e.g., Pop, Classical">
-                </div>
-                <div class="preference-item">
-                    <label>Smoking Allowed</label>
-                    <select id="smoking-allowed" class="input-field">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                    </select>
-                </div>
-            </div>
-        </div>
         <!-- Safety & Verification -->
         <div class="safety-verification-section">
             <h2>Safety & Verification</h2>
@@ -477,7 +446,6 @@
                 <p><strong>Seats:</strong> <span id="summary-seats">--</span></p>
                 <p><strong>Fare:</strong> $<span id="summary-fare">--</span></p>
                 <p><strong>Payment:</strong> <span id="summary-payment">--</span></p>
-                <p><strong>Preferences:</strong> <span id="summary-preferences">--</span></p>
                 <p><strong>Verification:</strong> <span id="summary-verification">--</span></p>
             </div>
             <button class="post-ride-btn" onclick="postRide()">Post Ride</button>
@@ -499,7 +467,6 @@
                 window.location.href = 'login.html?tab=login';
             }
         });
-
         // Update ride summary dynamically
         function updateSummary() {
             const pickup = document.getElementById('pickup-location').value || '--';
@@ -508,29 +475,21 @@
             const seats = document.getElementById('available-seats').value || '--';
             const fare = document.getElementById('fare-per-seat').value || '--';
             const payment = document.getElementById('payment-method').value || '--';
-            const luggage = document.getElementById('luggage-allowed').value || '--';
-            const pets = document.getElementById('pets-allowed').value || '--';
-            const music = document.getElementById('music-preference').value || 'None';
-            const smoking = document.getElementById('smoking-allowed').value || '--';
             const verification = document.getElementById('passenger-verification').value || '--';
-
             document.getElementById('summary-pickup').textContent = pickup;
             document.getElementById('summary-dropoff').textContent = dropoff;
             document.getElementById('summary-departure').textContent = departure ? new Date(departure).toLocaleString() : '--';
             document.getElementById('summary-seats').textContent = seats;
             document.getElementById('summary-fare').textContent = fare;
             document.getElementById('summary-payment').textContent = payment.charAt(0).toUpperCase() + payment.slice(1);
-            document.getElementById('summary-preferences').textContent = `Luggage: ${luggage}, Pets: ${pets}, Music: ${music}, Smoking: ${smoking}`;
             document.getElementById('summary-verification').textContent = verification.charAt(0).toUpperCase() + verification.slice(1);
         }
-
         // Simulate getting current location (placeholder)
         function getCurrentLocation(field) {
             alert('Current location feature requires Google Maps API integration and geolocation permissions.');
             // Example: document.getElementById(`${field}-location`).value = "Current Location (GPS)";
             updateSummary();
         }
-
         // Handle form input changes to update summary
         document.querySelectorAll('.input-field').forEach(input => {
             input.addEventListener('input', updateSummary);
@@ -538,7 +497,6 @@
         document.querySelectorAll('select.input-field').forEach(select => {
             select.addEventListener('change', updateSummary);
         });
-
         // Handle ride posting
         function postRide() {
             try {
@@ -549,10 +507,6 @@
                     seats: document.getElementById('available-seats').value,
                     fare: document.getElementById('fare-per-seat').value,
                     payment: document.getElementById('payment-method').value,
-                    luggage: document.getElementById('luggage-allowed').value,
-                    pets: document.getElementById('pets-allowed').value,
-                    music: document.getElementById('music-preference').value,
-                    smoking: document.getElementById('smoking-allowed').value,
                     verification: document.getElementById('passenger-verification').value,
                     emergency: document.getElementById('emergency-contact').value
                 };
@@ -570,7 +524,6 @@
                 alert('Error posting ride: ' + e.message);
             }
         }
-
         function logout() {
             try {
                 localStorage.clear();
