@@ -84,26 +84,29 @@
             box-shadow: 0 4px 20px var(--color-boxShadow);
             max-width: 1200px;
             margin: 20px auto;
-            height: calc(100vh - 80px - 60px); /* Adjusted for footer */
+            height: calc(100vh - 80px);
             overflow-y: auto;
-            scrollbar-width: thin; /* Firefox */
-            scrollbar-color: #90a4d4 #dbeafe; /* Thumb and track colors */
+            scrollbar-width: thin;
+            scrollbar-color: #6b82b8 #f3f4f6;
+            direction: rtl; /* Moves scrollbar to the left */
+        }
+        .dashboard-container > * {
+            direction: ltr; /* Ensures content remains left-to-right */
         }
         .dashboard-container::-webkit-scrollbar {
-            width: 8px; /* Width of the scrollbar */
-            height: 8px; /* Height for horizontal if needed */
+            width: 6px; /* Thinner scrollbar for cleaner look */
         }
         .dashboard-container::-webkit-scrollbar-track {
-            background: #dbeafe; /* Track color */
-            border-radius: 4px;
+            background: #f3f4f6; /* Cleaner track color */
+            border-radius: 8px;
         }
         .dashboard-container::-webkit-scrollbar-thumb {
-            background-color: #90a4d4; /* Thumb color */
-            border-radius: 4px;
-            border: 2px solid #dbeafe; /* Creates padding */
+            background-color: #6b82b8; /* Polished thumb color */
+            border-radius: 8px;
+            border: 1px solid #f3f4f6; /* Subtle border for refinement */
         }
         .dashboard-container::-webkit-scrollbar-thumb:hover {
-            background-color: #6b82b8; /* Darker thumb on hover */
+            background-color: #4b5e9a; /* Slightly darker on hover */
         }
         h1 {
             font-size: 1.8em;
@@ -235,6 +238,21 @@
         .close-btn:hover {
             background-color: var(--color-primary-hover);
         }
+        .sos-btn {
+            padding: 10px 20px;
+            background-color: #ef4444;
+            color: var(--color-text2);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        .sos-btn:hover {
+            background-color: #dc2626;
+        }
         .profile-edit-modal {
             display: none;
             position: fixed;
@@ -310,13 +328,12 @@
         .action-btn-blue:hover {
             background-color: var(--color-primary-hover);
         }
-        .footer {
-            background-color: var(--color-primary);
-            color: var(--color-text2);
-            text-align: center;
-            padding: 15px 0;
-            margin-top: 20px;
-            font-size: 0.9em;
+        .notification {
+            background-color: #fef3c7;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #92400e;
         }
         @media (max-width: 768px) {
             .dashboard-container {
@@ -443,7 +460,23 @@
                 <p>Manage payments</p>
             </div>
         </div>
+        <!-- Technical/Health Notifications -->
+        <div class="notification">
+            <p><strong>App Update Available:</strong> Version 2.1.3 - Please update for improved performance.</p>
+            <p><strong>Connection Status:</strong> GPS and Internet stable</p>
+        </div>
         <!-- Modals -->
+        <div class="modal" id="sosModal">
+            <div class="modal-content">
+                <h2>Emergency SOS</h2>
+                <p><strong>Need immediate assistance?</strong></p>
+                <p>Contact emergency services or notify your emergency contacts.</p>
+                <p><strong>Emergency Contact:</strong> +91-9876543210</p>
+                <p><strong>Current Location:</strong> Fetching location...</p>
+                <button class="sos-btn" onclick="contactEmergency()">Contact Emergency Services</button>
+                <button class="close-btn" onclick="closeModal('sosModal')">Close</button>
+            </div>
+        </div>
         <div class="modal" id="activeRideModal">
             <div class="modal-content">
                 <h2>Active Ride</h2>
@@ -454,7 +487,7 @@
                         <p><strong>Route:</strong> 123 Main St to 456 Oak Ave</p>
                         <p><strong>Estimated Arrival:</strong> 15 min</p>
                         <div class="active-ride-map">Map Placeholder</div>
-                        <button class="action-btn-blue" onclick="cancelRide('active1')">Cancel Ride</button>
+                        <button class="action-btn-blue" onclick="cancelRide('active1', 'activeRideModal')">Cancel Ride</button>
                         <p><small>Cancellation may incur a fee.</small></p>
                     </div>
                 </div>
@@ -492,7 +525,7 @@
                         <p><strong>Pickup:</strong> 789 Pine Rd</p>
                         <p><strong>Drop-off:</strong> 101 Elm St</p>
                         <p><strong>Time:</strong> 08/10/2025, 10:00 AM</p>
-                        <button class="action-btn-blue" onclick="cancelRide('upcoming1')">Cancel</button>
+                        <button class="action-btn-blue" onclick="cancelRide('upcoming1', 'upcomingRidesModal')">Cancel</button>
                     </div>
                 </div>
                 <button class="close-btn" onclick="closeModal('upcomingRidesModal')">Close</button>
@@ -600,9 +633,6 @@
             </div>
         </div>
     </div>
-    <footer class="footer">
-        <p>&copy; 2025 RideShare. All rights reserved.</p>
-    </footer>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             try {
@@ -623,7 +653,6 @@
                 window.location.href = 'login.html?tab=login';
             }
         });
-
         function logout() {
             try {
                 localStorage.clear();
@@ -633,7 +662,6 @@
                 window.location.href = 'login.html?tab=login';
             }
         }
-
         function openProfileEditModal() {
             const profile = JSON.parse(localStorage.getItem('passengerProfile') || '{}');
             document.getElementById('edit-name').value = profile.name || 'Jane Doe';
@@ -662,11 +690,12 @@
         function bookRide(rideId) {
             alert(`Booked ride ${rideId}. Functionality not fully implemented.`);
         }
-        function cancelRide(rideId) {
-            alert(`Cancelled ride ${rideId}. Functionality not fully implemented.`);
+        function cancelRide(rideId, modalId) {
+            alert(`Cancelled ride ${rideId}. A cancellation fee may apply.`);
+            closeModal(modalId);
         }
         function rebookRoute(routeId) {
-            alert(`Re-booked route ${rideId}. Functionality not fully implemented.`);
+            alert(`Re-booked route ${routeId}. Functionality not fully implemented.`);
         }
         function addPaymentMethod() {
             alert('Add payment method functionality not implemented.');
@@ -675,7 +704,10 @@
             alert('Referral link copied!');
         }
         function openSOSModal() {
-            alert('SOS functionality not implemented in this view.');
+            document.getElementById('sosModal').style.display = 'flex';
+        }
+        function contactEmergency() {
+            alert('Contacting emergency services... Functionality not fully implemented.');
         }
     </script>
 </body>
